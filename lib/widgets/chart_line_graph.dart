@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../models/log.dart';
+import '../domain/use_cases/thc_calculator.dart';
 
 enum ChartType {
   lengthPerHit,
@@ -41,16 +42,58 @@ List<FlSpot> defaultDataProcessor(List<Log> logs, ChartRange range) {
       .toList();
 }
 
+// New data processor for THC Concentration.
+List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
+  final now = DateTime.now();
+  late DateTime startRange;
+  late DateTime endRange;
+  switch (range) {
+    case ChartRange.daily:
+      startRange = DateTime(now.year, now.month, now.day);
+      // Daily chart spans 25 hours.
+      endRange = startRange.add(const Duration(hours: 25));
+      break;
+    case ChartRange.weekly:
+      // Weekly: start on Monday.
+      startRange = now.subtract(Duration(days: now.weekday - 1));
+      endRange = startRange.add(const Duration(days: 7));
+      break;
+    case ChartRange.monthly:
+      startRange = DateTime(now.year, now.month, 1);
+      // End at the start of next month.
+      endRange = DateTime(now.year, now.month + 1, 1);
+      break;
+  }
+
+  // Optionally filter logs to only those in the range.
+  final filteredLogs = logs
+      .where((log) =>
+          !log.timestamp.isBefore(startRange) &&
+          !log.timestamp.isAfter(endRange))
+      .toList();
+
+  final thcCalculator = THCConcentration(logs: filteredLogs);
+  final spots = <FlSpot>[];
+
+  DateTime t = startRange;
+  while (t.isBefore(endRange)) {
+    final x = t.millisecondsSinceEpoch.toDouble();
+    final y = thcCalculator.calculateTHCAtTime(x);
+    spots.add(FlSpot(x, y));
+    t = t.add(const Duration(minutes: 1));
+  }
+
+  return spots;
+}
+
 class LineChartWidget extends StatefulWidget {
   final List<Log> logs;
   final DataProcessor dataProcessor;
-  final ChartType chartType;
-
+  // Default chart type is now controlled by state.
   const LineChartWidget({
     Key? key,
     required this.logs,
     required this.dataProcessor,
-    this.chartType = ChartType.lengthPerHit,
   }) : super(key: key);
 
   @override
@@ -59,6 +102,7 @@ class LineChartWidget extends StatefulWidget {
 
 class _LineChartWidgetState extends State<LineChartWidget> {
   ChartRange _selectedRange = ChartRange.daily;
+  ChartType _selectedChartType = ChartType.lengthPerHit;
 
   // Calculate dynamic interval for the left axis.
   double calculateLeftInterval(double minY, double maxY) {
@@ -81,8 +125,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Process data based on selected range.
-    final spots = widget.dataProcessor(widget.logs, _selectedRange);
+    // Select data processor based on chart type.
+    final processor = _selectedChartType == ChartType.thcConcentration
+        ? thcConcentrationDataProcessor
+        : widget.dataProcessor;
+    final spots = processor(widget.logs, _selectedRange);
 
     // Sort spots by x value.
     spots.sort((a, b) => a.x.compareTo(b.x));
@@ -113,14 +160,12 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         maxX = next30.millisecondsSinceEpoch.toDouble();
         minX = maxX - dailySpan;
       } else if (_selectedRange == ChartRange.weekly) {
-        // For weekly, round up to the next day boundary (midnight) and subtract 7 days.
         final nextDay =
             DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
         maxX = nextDay.millisecondsSinceEpoch.toDouble();
         const weekSpan = 7 * 24 * 3600 * 1000; // 7 days in milliseconds.
         minX = maxX - weekSpan;
       } else if (_selectedRange == ChartRange.monthly) {
-        // For monthly, use the start of the month as minX and round current time to next day for maxX.
         final startOfMonth =
             DateTime(now.year, now.month, 1).millisecondsSinceEpoch.toDouble();
         final nextDay =
@@ -128,7 +173,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         maxX = nextDay.millisecondsSinceEpoch.toDouble();
         minX = startOfMonth;
       } else {
-        // Fallback: use first and last data points.
         maxX = spots.last.x;
         minX = spots.first.x;
       }
@@ -138,9 +182,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     final double computedMinY =
         spots.isEmpty ? 0 : spots.map((s) => s.y).reduce(min);
     final double maxY = spots.isEmpty ? 0 : spots.map((s) => s.y).reduce(max);
-    // For specific chart types, force the minY to 0.
-    final double minY = (widget.chartType == ChartType.lengthPerHit ||
-            widget.chartType == ChartType.cumulative)
+    final double minY = (_selectedChartType == ChartType.lengthPerHit ||
+            _selectedChartType == ChartType.cumulative)
         ? 0
         : computedMinY;
 
@@ -150,6 +193,26 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Chart Type selection dropdown.
+            DropdownButton<ChartType>(
+              value: _selectedChartType,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    _selectedChartType = newValue;
+                  });
+                }
+              },
+              items: ChartType.values
+                  .map((chartType) => DropdownMenuItem<ChartType>(
+                        value: chartType,
+                        child: Text(
+                            chartType.toString().split('.').last.toUpperCase()),
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(height: 8),
+            // Chart Range dropdown.
             DropdownButton<ChartRange>(
               value: _selectedRange,
               onChanged: (newValue) {
@@ -162,7 +225,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
               items: ChartRange.values
                   .map((chartRange) => DropdownMenuItem<ChartRange>(
                         value: chartRange,
-                        child: Text(chartRange.name.toUpperCase()),
+                        child: Text(chartRange
+                            .toString()
+                            .split('.')
+                            .last
+                            .toUpperCase()),
                       ))
                   .toList(),
             ),
@@ -180,11 +247,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                       lineBarsData: [
                         LineChartBarData(
                           isCurved:
-                              widget.chartType == ChartType.thcConcentration
+                              _selectedChartType == ChartType.thcConcentration
                                   ? false
                                   : true,
                           dotData: FlDotData(
-                              show: widget.chartType !=
+                              show: _selectedChartType !=
                                   ChartType.thcConcentration),
                           color: Theme.of(context).highlightColor,
                           barWidth: 4,
@@ -205,11 +272,10 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                             reservedSize: 40,
                             interval: calculateLeftInterval(minY, maxY),
                             getTitlesWidget: (value, meta) {
-                              // For charts other than THC Concentration, append seconds unit.
-                              final label =
-                                  widget.chartType == ChartType.thcConcentration
-                                      ? value.toStringAsFixed(0)
-                                      : '${value.toStringAsFixed(0)} s';
+                              final label = _selectedChartType ==
+                                      ChartType.thcConcentration
+                                  ? value.toStringAsFixed(0)
+                                  : '${value.toStringAsFixed(0)} s';
                               return Text(
                                 label,
                                 style: const TextStyle(fontSize: 10),
@@ -223,7 +289,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                             reservedSize: 30,
                             interval: determineBottomInterval(_selectedRange),
                             getTitlesWidget: (value, meta) {
-                              // Hide labels if they're at the min or max x position.
                               if (value.toInt() == minX.toInt() ||
                                   value.toInt() == maxX.toInt()) {
                                 return Container();
@@ -231,7 +296,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 
                               Widget labelWidget;
                               if (_selectedRange == ChartRange.daily) {
-                                // Daily: 12-hour format with AM/PM.
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
                                     value.toInt());
                                 final formattedTime =
@@ -242,7 +306,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   textAlign: TextAlign.center,
                                 );
                               } else if (_selectedRange == ChartRange.weekly) {
-                                // Weekly: Abbreviated weekday name.
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
                                     value.toInt());
                                 final formattedDay =
@@ -253,7 +316,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   textAlign: TextAlign.center,
                                 );
                               } else if (_selectedRange == ChartRange.monthly) {
-                                // Monthly: Month and day.
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
                                     value.toInt());
                                 final formattedDate =
@@ -264,7 +326,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   textAlign: TextAlign.center,
                                 );
                               } else {
-                                // Fallback - default formatting.
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
                                     value.toInt());
                                 final formattedDate =
@@ -279,7 +340,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Transform.rotate(
-                                  angle: -0.6, // Increased rotation angle.
+                                  angle: -0.6,
                                   child: labelWidget,
                                 ),
                               );
@@ -312,7 +373,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                               final formattedDate = dateFormat.format(date);
                               final value = touchedSpot.y.toStringAsFixed(2);
                               String label = '';
-                              switch (widget.chartType) {
+                              switch (_selectedChartType) {
                                 case ChartType.cumulative:
                                   label = 'Cumulative Usage';
                                   break;
@@ -332,12 +393,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   label = 'Usage';
                               }
                               return LineTooltipItem(
-                                '$formattedDate\n$label: $value',
-                                TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
-                              );
+                                  '$formattedDate\n$label: $value',
+                                  TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface));
                             }).toList();
                           },
                         ),

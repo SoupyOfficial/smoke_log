@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../domain/use_cases/thc_calculator.dart';
 import '../models/log_aggregates.dart';
 import '../models/log.dart';
 import '../services/log_repository.dart';

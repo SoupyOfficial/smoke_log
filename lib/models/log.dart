@@ -8,6 +8,7 @@ class Log {
   final double moodRating;
   final double physicalRating;
   final String? notes;
+  final int potencyRating;
 
   Log({
     this.id,
@@ -17,6 +18,7 @@ class Log {
     this.moodRating = 0.0,
     this.physicalRating = 0.0,
     this.notes,
+    required this.potencyRating,
   });
 
   factory Log.fromMap(Map<String, dynamic> map, String docId) {
@@ -28,6 +30,7 @@ class Log {
       moodRating: (map['moodRating'] ?? 0.0).toDouble(),
       physicalRating: (map['physicalRating'] ?? 0.0).toDouble(),
       notes: map['notes'],
+      potencyRating: map['potencyRating'] ?? 0,
     );
   }
 
@@ -35,6 +38,19 @@ class Log {
     return {
       'timestamp': Timestamp.fromDate(timestamp),
       'durationSeconds': durationSeconds,
+      'reason': reason,
+      'moodRating': moodRating,
+      'physicalRating': physicalRating,
+      'notes': notes,
+      'potencyRating': potencyRating,
+    };
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'timestamp': timestamp.toIso8601String(),
+      'durationSeconds': durationSeconds,
+      'potencyRating': potencyRating,
       'reason': reason,
       'moodRating': moodRating,
       'physicalRating': physicalRating,

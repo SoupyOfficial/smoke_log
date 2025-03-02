@@ -48,6 +48,8 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
           reason: _selectedReason.isEmpty ? 'Other' : _selectedReason,
           moodRating: _moodRating,
           physicalRating: _physicalRating,
+          potencyRating:
+              0, // Add a default value or replace with appropriate value
           notes: _notesController.text.isEmpty ? null : _notesController.text,
         );
 
