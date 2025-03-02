@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/log.dart';
@@ -14,7 +16,9 @@ class AddLogForm extends ConsumerStatefulWidget {
 
 class _AddLogFormState extends ConsumerState<AddLogForm> {
   DateTime? _startTime;
-  int _durationSeconds = 0;
+  double _durationSeconds = 0.0; // Change to double
+  Timer? _timer;
+  static const int _longPressDelay = 500; // milliseconds
   final _notesController = TextEditingController();
   List<String> _selectedReasons = [];
   int _moodRating = 7;
@@ -22,22 +26,39 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
 
   void _startTimer() {
     setState(() {
-      _startTime = DateTime.now();
-      _durationSeconds = 0;
+      // Adjust start time to account for long press delay
+      _startTime = DateTime.now()
+          .subtract(const Duration(milliseconds: _longPressDelay));
+      _durationSeconds = 0.0;
+    });
+
+    // Create a periodic timer to update the duration display
+    _timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      // ~60fps
+      if (_startTime != null) {
+        setState(() {
+          _durationSeconds =
+              DateTime.now().difference(_startTime!).inMilliseconds /
+                  1000; // Convert to seconds with decimals
+        });
+      }
     });
   }
 
   void _stopTimerAndSave() async {
+    _timer?.cancel();
     if (_startTime != null) {
+      final endTime = DateTime.now();
       setState(() {
-        _durationSeconds = DateTime.now().difference(_startTime!).inSeconds;
+        _durationSeconds =
+            endTime.difference(_startTime!).inMilliseconds / 1000;
         _startTime = null;
       });
 
       if (_durationSeconds > 0) {
         final log = Log(
           timestamp: DateTime.now(),
-          durationSeconds: _durationSeconds,
+          durationSeconds: _durationSeconds.round(), // Round for storage
           reason: _selectedReasons,
           moodRating: _moodRating,
           physicalRating: _physicalRating,
@@ -221,6 +242,7 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     _notesController.dispose();
     super.dispose();
   }
