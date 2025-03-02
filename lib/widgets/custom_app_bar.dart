@@ -64,21 +64,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentEmail = FirebaseAuth.instance.currentUser?.email ?? 'Guest';
+
     return AppBar(
-      title: Text(title),
+      title: Text('Welcome $currentEmail'),
       actions: [
         FutureBuilder<List<String>>(
           future: _getUserEmails(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting ||
                 snapshot.hasError) {
-              print(snapshot.error);
               return const SizedBox();
             }
             // Append the "Add Account" option.
             final userEmails = (snapshot.data ?? [])..add('Add Account');
             return UserSwitcher(
               userEmails: userEmails,
+              currentEmail: currentEmail,
               onSwitchAccount: (email) =>
                   _handleAccountSelection(email, context),
             );
