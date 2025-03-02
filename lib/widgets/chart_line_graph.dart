@@ -23,17 +23,17 @@ List<FlSpot> defaultDataProcessor(List<Log> logs, ChartRange range) {
   late DateTime startRange;
   switch (range) {
     case ChartRange.daily:
-      startRange = DateTime(now.year, now.month, now.day);
+      startRange = now.subtract(const Duration(hours: 24));
       break;
     case ChartRange.weekly:
-      startRange = now.subtract(Duration(days: now.weekday - 1));
+      startRange = now.subtract(const Duration(days: 7));
       break;
     case ChartRange.monthly:
-      startRange = DateTime(now.year, now.month, 1);
+      startRange = now.subtract(const Duration(days: 30));
       break;
   }
   final filteredLogs =
-      logs.where((log) => log.timestamp.isAfter(startRange)).toList();
+      logs.where((log) => !log.timestamp.isBefore(startRange)).toList();
   return filteredLogs
       .map((log) => FlSpot(
             log.timestamp.millisecondsSinceEpoch.toDouble(),
@@ -49,23 +49,20 @@ List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
   late DateTime endRange;
   switch (range) {
     case ChartRange.daily:
-      startRange = DateTime(now.year, now.month, now.day);
-      // Daily chart spans 25 hours.
-      endRange = startRange.add(const Duration(hours: 25));
+      startRange = now.subtract(const Duration(hours: 24));
+      endRange = now;
       break;
     case ChartRange.weekly:
-      // Weekly: start on Monday.
-      startRange = now.subtract(Duration(days: now.weekday - 1));
-      endRange = startRange.add(const Duration(days: 7));
+      startRange = now.subtract(const Duration(days: 7));
+      endRange = now;
       break;
     case ChartRange.monthly:
-      startRange = DateTime(now.year, now.month, 1);
-      // End at the start of next month.
-      endRange = DateTime(now.year, now.month + 1, 1);
+      startRange = now.subtract(const Duration(days: 30));
+      endRange = now;
       break;
   }
 
-  // Optionally filter logs to only those in the range.
+  // Filter logs to only those in the range.
   final filteredLogs = logs
       .where((log) =>
           !log.timestamp.isBefore(startRange) &&
@@ -76,7 +73,7 @@ List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
   final spots = <FlSpot>[];
 
   DateTime t = startRange;
-  while (t.isBefore(endRange)) {
+  while (t.isBefore(endRange) || t.isAtSameMomentAs(endRange)) {
     final x = t.millisecondsSinceEpoch.toDouble();
     final y = thcCalculator.calculateTHCAtTime(x);
     spots.add(FlSpot(x, y));
@@ -84,6 +81,21 @@ List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
   }
 
   return spots;
+}
+
+// New configuration class for chart-specific settings.
+class ChartConfig {
+  final DataProcessor dataProcessor;
+  final bool showDots;
+  final String Function(double) leftTitleFormatter;
+  final String Function(double) tooltipLabel;
+
+  const ChartConfig({
+    required this.dataProcessor,
+    required this.showDots,
+    required this.leftTitleFormatter,
+    required this.tooltipLabel,
+  });
 }
 
 class LineChartWidget extends StatefulWidget {
@@ -111,27 +123,53 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     return interval > 0 ? interval : 1.0;
   }
 
-  // Mimic DataUtils.determineInterval from the example based on time range.
+  // Determine bottom interval based on chart range.
   double determineBottomInterval(ChartRange range) {
     switch (range) {
       case ChartRange.daily:
-        return 30 * 60 * 1000; // 30 minutes in milliseconds
+        return 30 * 60 * 1000; // 30 minutes.
       case ChartRange.weekly:
-        return 24 * 3600 * 1000; // 1 day
+        return 24 * 3600 * 1000; // 1 day.
       case ChartRange.monthly:
-        return 7 * 24 * 3600 * 1000; // 1 week
+        return 7 * 24 * 3600 * 1000; // 1 week.
+    }
+  }
+
+  // New helper function to return chart configuration based on ChartType.
+  ChartConfig getChartConfig() {
+    switch (_selectedChartType) {
+      case ChartType.thcConcentration:
+        return ChartConfig(
+          dataProcessor: thcConcentrationDataProcessor,
+          showDots: false,
+          leftTitleFormatter: (value) => value.toStringAsFixed(0),
+          tooltipLabel: (value) =>
+              'THC Concentration: ${value.toStringAsFixed(2)}',
+        );
+      case ChartType.cumulative:
+        return ChartConfig(
+          dataProcessor: widget.dataProcessor,
+          showDots: true,
+          leftTitleFormatter: (value) => '${value.toStringAsFixed(0)} s',
+          tooltipLabel: (value) =>
+              'Cumulative Usage: ${value.toStringAsFixed(2)}',
+        );
+      // Add additional chart types as needed.
+      default:
+        return ChartConfig(
+          dataProcessor: widget.dataProcessor,
+          showDots: true,
+          leftTitleFormatter: (value) => '${value.toStringAsFixed(0)} s',
+          tooltipLabel: (value) => 'Usage: ${value.toStringAsFixed(2)}',
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Select data processor based on chart type.
-    final processor = _selectedChartType == ChartType.thcConcentration
-        ? thcConcentrationDataProcessor
-        : widget.dataProcessor;
-    final spots = processor(widget.logs, _selectedRange);
-
-    // Sort spots by x value.
+    // Use the chart configuration for settings.
+    final chartConfig = getChartConfig();
+    final spots = chartConfig.dataProcessor(widget.logs, _selectedRange);
     spots.sort((a, b) => a.x.compareTo(b.x));
 
     // Compute x-range bounds.
@@ -142,43 +180,25 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       minX = 0;
       maxX = 0;
     } else {
-      if (_selectedRange == ChartRange.daily) {
-        const dailySpan = 25 * 3600 * 1000; // 25 hours in milliseconds.
-        // Round current time up to the next 30-minute mark.
-        final int remainder = now.minute % 30;
-        final int minutesToAdd =
-            (remainder == 0 && now.second == 0 && now.millisecond == 0)
-                ? 30
-                : (30 - remainder);
-        final next30 = DateTime(
-          now.year,
-          now.month,
-          now.day,
-          now.hour,
-          now.minute,
-        ).add(Duration(minutes: minutesToAdd));
-        maxX = next30.millisecondsSinceEpoch.toDouble();
-        minX = maxX - dailySpan;
-      } else if (_selectedRange == ChartRange.weekly) {
-        final nextDay =
-            DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-        maxX = nextDay.millisecondsSinceEpoch.toDouble();
-        const weekSpan = 7 * 24 * 3600 * 1000; // 7 days in milliseconds.
-        minX = maxX - weekSpan;
-      } else if (_selectedRange == ChartRange.monthly) {
-        final startOfMonth =
-            DateTime(now.year, now.month, 1).millisecondsSinceEpoch.toDouble();
-        final nextDay =
-            DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-        maxX = nextDay.millisecondsSinceEpoch.toDouble();
-        minX = startOfMonth;
-      } else {
-        maxX = spots.last.x;
-        minX = spots.first.x;
+      final now = DateTime.now();
+      double span;
+      switch (_selectedRange) {
+        case ChartRange.daily:
+          span = 24 * 3600 * 1000; // 24 hours.
+          break;
+        case ChartRange.weekly:
+          span = 7 * 24 * 3600 * 1000; // 7 days.
+          break;
+        case ChartRange.monthly:
+          span = 30 * 24 * 3600 * 1000; // 30 days.
+          break;
       }
+      final double nowMs = now.millisecondsSinceEpoch.toDouble();
+      maxX = nowMs;
+      minX = nowMs - span;
     }
 
-    // Compute natural y-range bounds.
+    // Compute y-range bounds.
     final double computedMinY =
         spots.isEmpty ? 0 : spots.map((s) => s.y).reduce(min);
     final double maxY = spots.isEmpty ? 0 : spots.map((s) => s.y).reduce(max);
@@ -234,7 +254,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                   .toList(),
             ),
             const SizedBox(height: 8),
-            // Use LayoutBuilder to provide a finite height.
             LayoutBuilder(
               builder: (context, constraints) {
                 final height = constraints.hasBoundedHeight
@@ -247,12 +266,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                       lineBarsData: [
                         LineChartBarData(
                           isCurved: false,
-                          // _selectedChartType == ChartType.thcConcentration
-                          //     ? false
-                          //     : true,
-                          dotData: FlDotData(
-                              show: _selectedChartType !=
-                                  ChartType.thcConcentration),
+                          dotData: FlDotData(show: chartConfig.showDots),
                           color: Theme.of(context).highlightColor,
                           barWidth: 4,
                           belowBarData: BarAreaData(
@@ -272,10 +286,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                             reservedSize: 40,
                             interval: calculateLeftInterval(minY, maxY),
                             getTitlesWidget: (value, meta) {
-                              final label = _selectedChartType ==
-                                      ChartType.thcConcentration
-                                  ? value.toStringAsFixed(0)
-                                  : '${value.toStringAsFixed(0)} s';
+                              final label =
+                                  chartConfig.leftTitleFormatter(value);
                               return Text(
                                 label,
                                 style: const TextStyle(fontSize: 10),
@@ -293,7 +305,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   value.toInt() == maxX.toInt()) {
                                 return Container();
                               }
-
                               Widget labelWidget;
                               if (_selectedRange == ChartRange.daily) {
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
@@ -348,11 +359,9 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                           ),
                         ),
                         topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
+                            sideTitles: SideTitles(showTitles: false)),
                         rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
+                            sideTitles: SideTitles(showTitles: false)),
                       ),
                       borderData: FlBorderData(show: false),
                       gridData: const FlGridData(show: true),
@@ -371,33 +380,14 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                   touchedSpot.x.toInt());
                               final dateFormat = DateFormat('MMMM dd, HH:mm');
                               final formattedDate = dateFormat.format(date);
-                              final value = touchedSpot.y.toStringAsFixed(2);
-                              String label = '';
-                              switch (_selectedChartType) {
-                                case ChartType.cumulative:
-                                  label = 'Cumulative Usage';
-                                  break;
-                                case ChartType.thcConcentration:
-                                  label = 'THC Concentration';
-                                  break;
-                                case ChartType.rolling24h:
-                                  label = 'Rolling 24h Usage';
-                                  break;
-                                case ChartType.rolling30d:
-                                  label = 'Rolling 30d Usage';
-                                  break;
-                                case ChartType.rolling90d:
-                                  label = 'Rolling 90d Usage';
-                                  break;
-                                default:
-                                  label = 'Usage';
-                              }
+                              final value = touchedSpot.y;
                               return LineTooltipItem(
-                                  '$formattedDate\n$label: $value',
-                                  TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface));
+                                '$formattedDate\n${chartConfig.tooltipLabel(value)}',
+                                TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              );
                             }).toList();
                           },
                         ),
