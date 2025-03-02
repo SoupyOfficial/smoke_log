@@ -89,17 +89,47 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 
     // Compute x-range bounds.
     double minX, maxX;
+    final now = DateTime.now();
+
     if (spots.isEmpty) {
       minX = 0;
       maxX = 0;
     } else {
-      // Use the last data point as the maximum.
-      maxX = spots.last.x;
-      // For daily view, ensure a span of 25 hours is displayed.
       if (_selectedRange == ChartRange.daily) {
         const dailySpan = 25 * 3600 * 1000; // 25 hours in milliseconds.
+        // Round current time up to the next 30-minute mark.
+        final int remainder = now.minute % 30;
+        final int minutesToAdd =
+            (remainder == 0 && now.second == 0 && now.millisecond == 0)
+                ? 30
+                : (30 - remainder);
+        final next30 = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          now.hour,
+          now.minute,
+        ).add(Duration(minutes: minutesToAdd));
+        maxX = next30.millisecondsSinceEpoch.toDouble();
         minX = maxX - dailySpan;
+      } else if (_selectedRange == ChartRange.weekly) {
+        // For weekly, round up to the next day boundary (midnight) and subtract 7 days.
+        final nextDay =
+            DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+        maxX = nextDay.millisecondsSinceEpoch.toDouble();
+        const weekSpan = 7 * 24 * 3600 * 1000; // 7 days in milliseconds.
+        minX = maxX - weekSpan;
+      } else if (_selectedRange == ChartRange.monthly) {
+        // For monthly, use the start of the month as minX and round current time to next day for maxX.
+        final startOfMonth =
+            DateTime(now.year, now.month, 1).millisecondsSinceEpoch.toDouble();
+        final nextDay =
+            DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+        maxX = nextDay.millisecondsSinceEpoch.toDouble();
+        minX = startOfMonth;
       } else {
+        // Fallback: use first and last data points.
+        maxX = spots.last.x;
         minX = spots.first.x;
       }
     }
@@ -193,45 +223,66 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                             reservedSize: 30,
                             interval: determineBottomInterval(_selectedRange),
                             getTitlesWidget: (value, meta) {
+                              // Hide labels if they're at the min or max x position.
+                              if (value.toInt() == minX.toInt() ||
+                                  value.toInt() == maxX.toInt()) {
+                                return Container();
+                              }
+
+                              Widget labelWidget;
                               if (_selectedRange == ChartRange.daily) {
-                                // For daily view, format as 12-hour with AM/PM.
+                                // Daily: 12-hour format with AM/PM.
                                 final dt = DateTime.fromMillisecondsSinceEpoch(
                                     value.toInt());
                                 final formattedTime =
                                     DateFormat('hh:mm a').format(dt);
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Transform.rotate(
-                                    angle: -0.6, // Increased rotation angle.
-                                    child: Text(
-                                      formattedTime,
-                                      style: const TextStyle(fontSize: 10),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                                labelWidget = Text(
+                                  formattedTime,
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.center,
+                                );
+                              } else if (_selectedRange == ChartRange.weekly) {
+                                // Weekly: Abbreviated weekday name.
+                                final dt = DateTime.fromMillisecondsSinceEpoch(
+                                    value.toInt());
+                                final formattedDay =
+                                    DateFormat('EEE').format(dt);
+                                labelWidget = Text(
+                                  formattedDay,
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.center,
+                                );
+                              } else if (_selectedRange == ChartRange.monthly) {
+                                // Monthly: Month and day.
+                                final dt = DateTime.fromMillisecondsSinceEpoch(
+                                    value.toInt());
+                                final formattedDate =
+                                    DateFormat('MMM dd').format(dt);
+                                labelWidget = Text(
+                                  formattedDate,
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.center,
                                 );
                               } else {
-                                // For other time ranges, use default formatting.
-                                if (spots.isEmpty || value == spots.last.x) {
-                                  return Container();
-                                }
-                                final date =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        value.toInt());
+                                // Fallback - default formatting.
+                                final dt = DateTime.fromMillisecondsSinceEpoch(
+                                    value.toInt());
                                 final formattedDate =
-                                    DateFormat('MMM dd').format(date);
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Transform.rotate(
-                                    angle: -0.6,
-                                    child: Text(
-                                      formattedDate,
-                                      style: const TextStyle(fontSize: 10),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                                    DateFormat('MMM dd').format(dt);
+                                labelWidget = Text(
+                                  formattedDate,
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.center,
                                 );
                               }
+
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Transform.rotate(
+                                  angle: -0.6, // Increased rotation angle.
+                                  child: labelWidget,
+                                ),
+                              );
                             },
                           ),
                         ),
