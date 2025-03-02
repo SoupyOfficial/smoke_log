@@ -2,31 +2,27 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
-import '../models/log.dart';
-import '../services/log_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/log_providers.dart';
 import '../widgets/add_log_form.dart';
 import '../widgets/info_display.dart';
+import '../widgets/log_list.dart';
+import 'log_list_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  late final LogRepository _logRepository;
-  final _dateFormat = DateFormat('MMM d, y h:mm a');
-
-  // Timer for updating "Time Since Last Hit"
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   Timer? _updateTimer;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    _logRepository = LogRepository(userId);
 
     // Update the display every minute
     _updateTimer = Timer.periodic(const Duration(minutes: 1), (_) {
@@ -36,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _deleteLog(String logId) async {
     try {
-      await _logRepository.deleteLog(logId);
+      final logRepository = ref.read(logRepositoryProvider);
+      await logRepository.deleteLog(logId);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Log deleted')),
@@ -55,8 +52,37 @@ class _HomeScreenState extends State<HomeScreen> {
     await FirebaseAuth.instance.signOut();
   }
 
+  void _showAddLogDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Log'),
+          content: const AddLogForm(),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = <Widget>[
+      _buildHomePage(context),
+      const LogListScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Smoke Log'),
@@ -67,80 +93,45 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: StreamBuilder<List<Log>>(
-        stream: _logRepository.streamLogs(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          final logs = snapshot.data ?? [];
-
-          return Column(
-            children: [
-              InfoDisplay(
-                  logs: logs), // Replace _buildInfoDisplay with InfoDisplay
-              AddLogForm(logRepository: _logRepository),
-              Expanded(
-                child: logs.isEmpty
-                    ? const Center(child: Text('No logs yet'))
-                    : ListView.builder(
-                        itemCount: logs.length,
-                        itemBuilder: (context, index) {
-                          final log = logs[index];
-                          return Dismissible(
-                            key: Key(log.id!),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              color: Colors.red,
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child:
-                                  const Icon(Icons.delete, color: Colors.white),
-                            ),
-                            confirmDismiss: (direction) async {
-                              return await showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Delete Log'),
-                                  content: const Text(
-                                      'Are you sure you want to delete this log?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, false),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, true),
-                                      child: const Text('Delete'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            onDismissed: (direction) => _deleteLog(log.id!),
-                            child: ListTile(
-                              title: Text(_dateFormat.format(log.timestamp)),
-                              subtitle: Text('${log.durationSeconds}s'),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          );
-        },
+      body: pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Logs',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {}, // Empty onPressed for now
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: _showAddLogDialog,
+              child: const Icon(Icons.add),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildHomePage(BuildContext context) {
+    final logsAsyncValue = ref.watch(logsStreamProvider);
+
+    return logsAsyncValue.when(
+      data: (logs) {
+        return Column(
+          children: [
+            InfoDisplay(logs: logs),
+            const AddLogForm(),
+            // LogList(logs: logs, onDeleteLog: _deleteLog),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
     );
   }
 

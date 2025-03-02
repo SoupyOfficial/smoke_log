@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/log.dart';
-import '../services/log_repository.dart';
+import '../providers/log_providers.dart';
 
-class AddLogForm extends StatefulWidget {
-  final LogRepository logRepository;
-
-  const AddLogForm({
-    super.key,
-    required this.logRepository,
-  });
+class AddLogForm extends ConsumerStatefulWidget {
+  const AddLogForm({super.key});
 
   @override
-  State<AddLogForm> createState() => _AddLogFormState();
+  ConsumerState<AddLogForm> createState() => _AddLogFormState();
 }
 
-class _AddLogFormState extends State<AddLogForm> {
+class _AddLogFormState extends ConsumerState<AddLogForm> {
   DateTime? _startTime;
   int _durationSeconds = 0;
   final _notesController = TextEditingController();
@@ -56,7 +52,8 @@ class _AddLogFormState extends State<AddLogForm> {
         );
 
         try {
-          await widget.logRepository.addLog(log);
+          final logRepository = ref.read(logRepositoryProvider);
+          await logRepository.addLog(log);
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Log added successfully')),
@@ -76,7 +73,6 @@ class _AddLogFormState extends State<AddLogForm> {
 
   void _resetForm() {
     setState(() {
-      _startTime = null;
       _durationSeconds = 0;
       _notesController.clear();
       _selectedReason = '';
