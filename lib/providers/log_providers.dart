@@ -21,15 +21,15 @@ final logsStreamProvider = StreamProvider<List<Log>>((ref) {
   return repository.streamLogs();
 });
 
-// Computed aggregates
+// Computed aggregates using the updated LogAggregates model.
 final logAggregatesProvider = Provider<LogAggregates>((ref) {
   final logsAsyncValue = ref.watch(logsStreamProvider);
   return logsAsyncValue.when(
     data: (logs) => LogAggregates.fromLogs(logs),
-    loading: () => const LogAggregates(
-        timeSinceLastHit: 'Loading...', totalSecondsToday: 0),
-    error: (_, __) =>
-        const LogAggregates(timeSinceLastHit: 'Error', totalSecondsToday: 0),
+    loading: () => LogAggregates(
+        lastHit: DateTime.now(), totalSecondsToday: 0, thcContent: 0.0),
+    error: (_, __) => LogAggregates(
+        lastHit: DateTime.now(), totalSecondsToday: 0, thcContent: 0.0),
   );
 });
 

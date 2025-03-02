@@ -16,8 +16,21 @@ class InfoDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final aggregates = LogAggregates.fromLogs(logs);
 
-    // Local helper to format duration similar to LogAggregates.
-    String formatDuration(int seconds) {
+    // Helper to format a Duration as HH:MM:SS.
+    String formatDurationHHMMSS(Duration duration) {
+      String twoDigits(int n) => n.toString().padLeft(2, '0');
+      final hours = twoDigits(duration.inHours);
+      final minutes = twoDigits(duration.inMinutes.remainder(60));
+      final seconds = twoDigits(duration.inSeconds.remainder(60));
+      return "$hours:$minutes:$seconds";
+    }
+
+    // If no last hit is available, default to a zero Duration.
+    final lastHitTime = aggregates.lastHit ?? DateTime.now();
+    final timeSinceLastHit = DateTime.now().difference(lastHitTime);
+
+    // Other helper for formatting duration (ex: Total Length Display) remains
+    String formatNormalDuration(int seconds) {
       if (seconds < 60) return '$seconds seconds';
       if (seconds < 3600) {
         final minutes = seconds ~/ 60;
@@ -45,7 +58,7 @@ class InfoDisplay extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Time Since Last Hit: ${aggregates.timeSinceLastHit}',
+              'Time Since Last Hit: ${formatDurationHHMMSS(timeSinceLastHit)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -55,12 +68,12 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Total Length Last 24 Hours: ${formatDuration(totalSecondsLast24)}',
+              'Total Length Last 24 Hours: ${formatNormalDuration(totalSecondsLast24)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
-              'THC Content: ${thcValue.toStringAsFixed(4)}',
+              'Current THC Content: ${thcValue.toStringAsFixed(4)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
