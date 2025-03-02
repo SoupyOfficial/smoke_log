@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/auth_provider.dart';
 import '../screens/login_screen.dart';
 import '../services/credential_service.dart';
 import 'user_switcher.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   final String title;
 
   const CustomAppBar({
@@ -12,88 +15,92 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
   }) : super(key: key);
 
-  Future<void> _switchAccount(String email, BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
+  @override
+  ConsumerState<CustomAppBar> createState() => _CustomAppBarState();
 
-    // Retrieve the saved password for the provided email.
-    final password = await CredentialService().getPasswordForEmail(email);
-    if (password == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No saved credential for $email')),
-      );
-      return;
-    }
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _CustomAppBarState extends ConsumerState<CustomAppBar> {
+  Future<void> _switchAccount(String email) async {
+    if (email == FirebaseAuth.instance.currentUser?.email) return;
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Switched account to $email')),
-      );
+      await ref.read(authServiceProvider).switchAccount(email);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to switch account: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to switch account: $e')),
+        );
+      }
     }
   }
 
-  Future<void> _signOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
+  Future<void> _signOut() async {
+    final authService = ref.read(authServiceProvider);
+    await authService.signOut();
   }
 
-  Future<List<String>> _getUserEmails() async {
-    final accounts = await CredentialService().getUserAccounts();
-    return accounts.map((account) => account['email']!).toList();
+  Future<List<Map<String, String>>> _getUserAccounts() async {
+    final credentialService = ref.read(credentialServiceProvider);
+    return credentialService.getUserAccounts();
   }
 
-  Future<void> _handleAccountSelection(
-      String email, BuildContext context) async {
+  Future<void> _handleAccountSelection(String email) async {
     if (email == 'Add Account') {
       // Sign out then redirect to the login screen.
-      await _signOut(context);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      await _signOut();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
     } else {
-      await _switchAccount(email, context);
+      await _switchAccount(email);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentEmail = FirebaseAuth.instance.currentUser?.email ?? 'Guest';
+    final authState = ref.watch(authStateProvider);
+    final authTypeState = ref.watch(userAuthTypeProvider);
 
-    return AppBar(
-      title: Text('Welcome $currentEmail'),
-      actions: [
-        FutureBuilder<List<String>>(
-          future: _getUserEmails(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                snapshot.hasError) {
-              return const SizedBox();
-            }
-            // Append the "Add Account" option.
-            final userEmails = (snapshot.data ?? [])..add('Add Account');
-            return UserSwitcher(
-              userEmails: userEmails,
-              currentEmail: currentEmail,
-              onSwitchAccount: (email) =>
-                  _handleAccountSelection(email, context),
-            );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () => _signOut(context),
-        ),
-      ],
+    return authState.when(
+      data: (user) {
+        final currentEmail = user?.email ?? 'Guest';
+
+        return AppBar(
+          title: Text(widget.title),
+          actions: [
+            FutureBuilder<List<Map<String, String>>>(
+              future: _getUserAccounts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    snapshot.hasError) {
+                  return const SizedBox();
+                }
+
+                final accounts = snapshot.data ?? [];
+
+                return UserSwitcher(
+                  accounts: accounts,
+                  currentEmail: currentEmail,
+                  onSwitchAccount: _handleAccountSelection,
+                  authType: authTypeState.value ?? 'none',
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => _signOut(),
+            ),
+          ],
+        );
+      },
+      loading: () => AppBar(title: Text(widget.title)),
+      error: (_, __) => AppBar(title: Text(widget.title)),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

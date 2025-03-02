@@ -30,3 +30,13 @@ final authServiceProvider = Provider<AuthService>((ref) {
 final authStateProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });
+
+final userAuthTypeProvider = StreamProvider<String>((ref) {
+  return ref.watch(firebaseAuthProvider).authStateChanges().map((user) {
+    if (user == null) return 'none';
+    // Check if the user's providers list contains Google
+    final isGoogleUser = user.providerData
+        .any((provider) => provider.providerId == 'google.com');
+    return isGoogleUser ? 'google' : 'password';
+  });
+});

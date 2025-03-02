@@ -16,20 +16,33 @@ class CredentialService {
     return [];
   }
 
-  Future<void> addUserAccount(String email, String password) async {
+  Future<void> addUserAccount(
+      String email, String? password, String authType) async {
     final accounts = await getUserAccounts();
-    // Do not add if account already exists.
-    if (accounts.any((account) => account['email'] == email)) return;
-    accounts.add({'email': email, 'password': password});
+    // Update if account exists, otherwise add new
+    final existingIndex =
+        accounts.indexWhere((account) => account['email'] == email);
+    final accountData = {
+      'email': email,
+      'password': password ?? '',
+      'authType': authType,
+    };
+
+    if (existingIndex >= 0) {
+      accounts[existingIndex] = accountData;
+    } else {
+      accounts.add(accountData);
+    }
+
     await _storage.write(key: _accountsKey, value: jsonEncode(accounts));
   }
 
-  Future<String?> getPasswordForEmail(String email) async {
+  Future<Map<String, String>?> getAccountDetails(String email) async {
     final accounts = await getUserAccounts();
     final account = accounts.firstWhere(
       (account) => account['email'] == email,
       orElse: () => {},
     );
-    return account.isEmpty ? null : account['password'];
+    return account.isEmpty ? null : account;
   }
 }
