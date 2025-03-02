@@ -8,6 +8,7 @@ import '../widgets/add_log_form.dart';
 import '../widgets/info_display.dart';
 import '../widgets/log_list.dart';
 import 'log_list_screen.dart';
+import '../providers/thc_content_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +25,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
 
-    // Update the display every minute
+    // Update the display every minute for other UI elements.
     _updateTimer = Timer.periodic(const Duration(minutes: 1), (_) {
       if (mounted) setState(() {});
     });
@@ -76,6 +77,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  Widget _buildHomePage(BuildContext context) {
+    final logsAsyncValue = ref.watch(logsStreamProvider);
+
+    return logsAsyncValue.when(
+      data: (logs) {
+        // Also listen to the live THC content provider and feed the value into InfoDisplay.
+        final liveThcAsync = ref.watch(liveThcContentProvider);
+
+        return liveThcAsync.when(
+          data: (liveThc) => Column(
+            children: [
+              InfoDisplay(logs: logs, liveThcContent: liveThc),
+              const AddLogForm(),
+              // Optionally include other widgets like LogList here.
+            ],
+          ),
+          loading: () => Column(
+            children: [
+              // When THC is not yet available, show the default aggregates.
+              InfoDisplay(logs: logs),
+              const SizedBox(height: 16),
+              const CircularProgressIndicator(),
+              const AddLogForm(),
+            ],
+          ),
+          error: (error, stack) => Column(
+            children: [
+              InfoDisplay(logs: logs),
+              Text('Error: $error'),
+              const AddLogForm(),
+            ],
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
+    );
+  }
+
+  @override
+  void dispose() {
+    _updateTimer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = <Widget>[
@@ -115,29 +161,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             )
           : null,
     );
-  }
-
-  Widget _buildHomePage(BuildContext context) {
-    final logsAsyncValue = ref.watch(logsStreamProvider);
-
-    return logsAsyncValue.when(
-      data: (logs) {
-        return Column(
-          children: [
-            InfoDisplay(logs: logs),
-            const AddLogForm(),
-            // LogList(logs: logs, onDeleteLog: _deleteLog),
-          ],
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text('Error: $error')),
-    );
-  }
-
-  @override
-  void dispose() {
-    _updateTimer?.cancel();
-    super.dispose();
   }
 }

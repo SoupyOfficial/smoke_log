@@ -4,15 +4,19 @@ import '../models/log_aggregates.dart';
 
 class InfoDisplay extends StatelessWidget {
   final List<Log> logs;
+  final double? liveThcContent;
 
   const InfoDisplay({
     super.key,
     required this.logs,
+    this.liveThcContent,
   });
 
   @override
   Widget build(BuildContext context) {
     final aggregates = LogAggregates.fromLogs(logs);
+    // Use the live value if available; otherwise, fallback to aggregates.
+    final thcValue = (liveThcContent ?? aggregates.thcContent) as double;
 
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -32,7 +36,7 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'THC Content: ${aggregates.thcContent}',
+              'THC Content: ${thcValue.toStringAsFixed(4)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
