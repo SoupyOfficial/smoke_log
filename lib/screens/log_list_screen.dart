@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smoke_log/widgets/charts/line_chart_widget.dart';
 import '../providers/log_providers.dart';
+import '../widgets/charts/chart_data_processors.dart';
 import '../widgets/log_list.dart';
-import '../widgets/chart_line_graph.dart';
 
 class LogListScreen extends ConsumerWidget {
   const LogListScreen({super.key});
