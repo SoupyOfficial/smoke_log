@@ -83,6 +83,69 @@ List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
   return spots;
 }
 
+// Updated data processor for cumulative length chart type.
+List<FlSpot> cumulativeDataProcessor(List<Log> logs, ChartRange range) {
+  final now = DateTime.now();
+  late DateTime startRange;
+  switch (range) {
+    case ChartRange.daily:
+      // For daily, show detailed cumulative progression starting at today's midnight.
+      startRange = DateTime(now.year, now.month, now.day);
+      break;
+    case ChartRange.weekly:
+      startRange = now.subtract(const Duration(days: 7));
+      break;
+    case ChartRange.monthly:
+      startRange = now.subtract(const Duration(days: 30));
+      break;
+  }
+  final endRange = now;
+
+  // Filter logs within the range.
+  final filteredLogs = logs
+      .where((log) =>
+          (log.timestamp.isAfter(startRange) ||
+              log.timestamp.isAtSameMomentAs(startRange)) &&
+          (log.timestamp.isBefore(endRange) ||
+              log.timestamp.isAtSameMomentAs(endRange)))
+      .toList();
+
+  // Group logs by day.
+  final Map<DateTime, List<Log>> groupedLogs = {};
+  for (final log in filteredLogs) {
+    final day =
+        DateTime(log.timestamp.year, log.timestamp.month, log.timestamp.day);
+    groupedLogs.putIfAbsent(day, () => []).add(log);
+  }
+
+  final spots = <FlSpot>[];
+
+  if (range == ChartRange.daily) {
+    // Detailed view: Add a starting point at midnight, then each log's cumulative value.
+    final day = DateTime(now.year, now.month, now.day);
+    final logsForDay = groupedLogs[day] ?? [];
+    logsForDay.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    double cumulative = 0;
+    spots.add(FlSpot(day.millisecondsSinceEpoch.toDouble(), 0));
+    for (final log in logsForDay) {
+      cumulative += log.durationSeconds;
+      spots.add(
+          FlSpot(log.timestamp.millisecondsSinceEpoch.toDouble(), cumulative));
+    }
+  } else {
+    // For weekly and monthly, show one point per day (the total cumulative length for that day).
+    final sortedDays = groupedLogs.keys.toList()..sort();
+    for (final day in sortedDays) {
+      final logsForDay = groupedLogs[day]!;
+      final dailyTotal =
+          logsForDay.fold(0.0, (prev, log) => prev + log.durationSeconds);
+      spots.add(FlSpot(day.millisecondsSinceEpoch.toDouble(), dailyTotal));
+    }
+  }
+
+  return spots;
+}
+
 // New configuration class for chart-specific settings.
 class ChartConfig {
   final DataProcessor dataProcessor;
@@ -123,8 +186,13 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     return interval > 0 ? interval : 1.0;
   }
 
-  // Determine bottom interval based on chart range.
+  // Modify the determineBottomInterval() function in _LineChartWidgetState:
   double determineBottomInterval(ChartRange range) {
+    // For cumulative charts in weekly and monthly ranges, force one day intervals.
+    if (_selectedChartType == ChartType.cumulative &&
+        range != ChartRange.daily) {
+      return 24 * 3600 * 1000; // 1 day.
+    }
     switch (range) {
       case ChartRange.daily:
         return 30 * 60 * 1000; // 30 minutes.
@@ -148,7 +216,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         );
       case ChartType.cumulative:
         return ChartConfig(
-          dataProcessor: widget.dataProcessor,
+          dataProcessor: cumulativeDataProcessor,
           showDots: true,
           leftTitleFormatter: (value) => '${value.toStringAsFixed(0)} s',
           tooltipLabel: (value) =>
@@ -313,6 +381,18 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                                     DateFormat('hh:mm a').format(dt);
                                 labelWidget = Text(
                                   formattedTime,
+                                  style: const TextStyle(fontSize: 10),
+                                  textAlign: TextAlign.center,
+                                );
+                              } else if (_selectedChartType ==
+                                  ChartType.cumulative) {
+                                // For cumulative charts (weekly and monthly), always use MMM dd.
+                                final dt = DateTime.fromMillisecondsSinceEpoch(
+                                    value.toInt());
+                                final formattedDate =
+                                    DateFormat('MMM dd').format(dt);
+                                labelWidget = Text(
+                                  formattedDate,
                                   style: const TextStyle(fontSize: 10),
                                   textAlign: TextAlign.center,
                                 );
