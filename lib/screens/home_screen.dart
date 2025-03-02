@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../widgets/custom_app_bar.dart';
 import '../providers/log_providers.dart';
 import '../widgets/add_log_form.dart';
 import '../widgets/info_display.dart';
-import '../widgets/log_list.dart';
 import 'log_list_screen.dart';
 import '../providers/thc_content_provider.dart';
 
@@ -24,8 +23,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Update the display every minute for other UI elements.
     _updateTimer = Timer.periodic(const Duration(minutes: 1), (_) {
       if (mounted) setState(() {});
     });
@@ -82,20 +79,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return logsAsyncValue.when(
       data: (logs) {
-        // Also listen to the live THC content provider and feed the value into InfoDisplay.
         final liveThcAsync = ref.watch(liveThcContentProvider);
-
         return liveThcAsync.when(
           data: (liveThc) => Column(
             children: [
               InfoDisplay(logs: logs, liveThcContent: liveThc),
               const AddLogForm(),
-              // Optionally include other widgets like LogList here.
             ],
           ),
           loading: () => Column(
             children: [
-              // When THC is not yet available, show the default aggregates.
               InfoDisplay(logs: logs),
               const SizedBox(height: 16),
               const CircularProgressIndicator(),
@@ -130,15 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Smoke Log'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _signOut,
-          ),
-        ],
-      ),
+      appBar: const CustomAppBar(title: 'Smoke Log'),
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
