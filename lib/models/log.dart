@@ -26,11 +26,13 @@ class Log {
       id: docId,
       timestamp: (map['timestamp'] as Timestamp).toDate(),
       durationSeconds: map['durationSeconds'] ?? 0,
-      reason: map['reason'] ?? '',
+      reason: map['reason'] is List
+          ? (map['reason'] as List).join(', ')
+          : map['reason'] ?? '',
       moodRating: (map['moodRating'] ?? 0.0).toDouble(),
       physicalRating: (map['physicalRating'] ?? 0.0).toDouble(),
       notes: map['notes'],
-      potencyRating: map['potencyRating'] ?? 0,
+      potencyRating: map['potencyRating'],
     );
   }
 

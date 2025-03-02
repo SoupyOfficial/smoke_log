@@ -246,10 +246,10 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                     LineChartData(
                       lineBarsData: [
                         LineChartBarData(
-                          isCurved:
-                              _selectedChartType == ChartType.thcConcentration
-                                  ? false
-                                  : true,
+                          isCurved: false,
+                          // _selectedChartType == ChartType.thcConcentration
+                          //     ? false
+                          //     : true,
                           dotData: FlDotData(
                               show: _selectedChartType !=
                                   ChartType.thcConcentration),
