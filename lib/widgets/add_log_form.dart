@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/log.dart';
 import '../providers/log_providers.dart';
+import '../providers/dropdown_options_provider.dart';
+import '../models/reason_option.dart';
 
 class AddLogForm extends ConsumerStatefulWidget {
   const AddLogForm({super.key});
@@ -14,17 +16,9 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
   DateTime? _startTime;
   int _durationSeconds = 0;
   final _notesController = TextEditingController();
-  String _selectedReason = '';
-  double _moodRating = 3.0;
-  double _physicalRating = 3.0;
-
-  final List<String> _reasons = [
-    'Stress Relief',
-    'Social',
-    'Relaxation',
-    'Habit',
-    'Other'
-  ];
+  List<String> _selectedReasons = [];
+  int _moodRating = 7;
+  int _physicalRating = 7;
 
   void _startTimer() {
     setState(() {
@@ -40,16 +34,14 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
         _startTime = null;
       });
 
-      // Only save if duration is greater than 0 seconds
       if (_durationSeconds > 0) {
         final log = Log(
           timestamp: DateTime.now(),
           durationSeconds: _durationSeconds,
-          reason: _selectedReason.isEmpty ? 'Other' : _selectedReason,
+          reason: _selectedReasons,
           moodRating: _moodRating,
           physicalRating: _physicalRating,
-          potencyRating:
-              0, // Add a default value or replace with appropriate value
+          potencyRating: 0,
           notes: _notesController.text.isEmpty ? null : _notesController.text,
         );
 
@@ -77,10 +69,42 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
     setState(() {
       _durationSeconds = 0;
       _notesController.clear();
-      _selectedReason = '';
-      _moodRating = 3.0;
-      _physicalRating = 3.0;
+      _selectedReasons = [];
+      _moodRating = 7;
+      _physicalRating = 7;
     });
+  }
+
+  Widget _buildDropdownOptions() {
+    final optionsAsync = ref.watch(dropdownOptionsProvider);
+    return optionsAsync.when(
+      data: (options) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Wrap(
+            spacing: 8.0,
+            children: options.map((ReasonOption option) {
+              final isSelected = _selectedReasons.contains(option.option);
+              return ChoiceChip(
+                label: Text(option.option),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedReasons.add(option.option);
+                    } else {
+                      _selectedReasons.remove(option.option);
+                    }
+                  });
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (error, stack) => Text('Error: $error'),
+    );
   }
 
   @override
@@ -138,18 +162,8 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                labelText: 'Reason',
-                border: OutlineInputBorder(),
-              ),
-              value: _selectedReason.isEmpty ? null : _selectedReason,
-              items: _reasons.map((reason) {
-                return DropdownMenuItem(value: reason, child: Text(reason));
-              }).toList(),
-              onChanged: (value) =>
-                  setState(() => _selectedReason = value ?? ''),
-            ),
+            // Use the Firestore options for the multi-select chips.
+            _buildDropdownOptions(),
             const SizedBox(height: 16),
             Row(
               children: [
@@ -157,15 +171,15 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Mood: ${_moodRating.toStringAsFixed(1)}'),
+                      Text('Mood: $_moodRating'),
                       Slider(
-                        value: _moodRating,
-                        min: 0,
-                        max: 5,
-                        divisions: 10,
-                        label: _moodRating.toStringAsFixed(1),
+                        value: _moodRating.toDouble(),
+                        min: 1,
+                        max: 10,
+                        divisions: 9,
+                        label: '$_moodRating',
                         onChanged: (value) =>
-                            setState(() => _moodRating = value),
+                            setState(() => _moodRating = value.toInt()),
                       ),
                     ],
                   ),
@@ -175,15 +189,15 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Physical: ${_physicalRating.toStringAsFixed(1)}'),
+                      Text('Physical: $_physicalRating'),
                       Slider(
-                        value: _physicalRating,
-                        min: 0,
-                        max: 5,
-                        divisions: 10,
-                        label: _physicalRating.toStringAsFixed(1),
+                        value: _physicalRating.toDouble(),
+                        min: 1,
+                        max: 10,
+                        divisions: 9,
+                        label: '$_physicalRating',
                         onChanged: (value) =>
-                            setState(() => _physicalRating = value),
+                            setState(() => _physicalRating = value.toInt()),
                       ),
                     ],
                   ),

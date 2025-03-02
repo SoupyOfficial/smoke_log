@@ -4,9 +4,9 @@ class Log {
   final String? id;
   final DateTime timestamp;
   final int durationSeconds;
-  final String reason;
-  final double moodRating;
-  final double physicalRating;
+  final List<String> reason;
+  final int moodRating;
+  final int physicalRating;
   final String? notes;
   final int potencyRating;
 
@@ -14,12 +14,12 @@ class Log {
     this.id,
     required this.timestamp,
     this.durationSeconds = 0,
-    this.reason = '',
-    this.moodRating = 0.0,
-    this.physicalRating = 0.0,
+    List<String>? reason,
+    this.moodRating = 1,
+    this.physicalRating = 1,
     this.notes,
     required this.potencyRating,
-  });
+  }) : reason = reason ?? [];
 
   factory Log.fromMap(Map<String, dynamic> map, String docId) {
     return Log(
@@ -27,10 +27,10 @@ class Log {
       timestamp: (map['timestamp'] as Timestamp).toDate(),
       durationSeconds: map['durationSeconds'] ?? 0,
       reason: map['reason'] is List
-          ? (map['reason'] as List).join(', ')
-          : map['reason'] ?? '',
-      moodRating: (map['moodRating'] ?? 0.0).toDouble(),
-      physicalRating: (map['physicalRating'] ?? 0.0).toDouble(),
+          ? List<String>.from(map['reason'])
+          : [map['reason'] ?? ''],
+      moodRating: (map['moodRating'] ?? 1).toInt(),
+      physicalRating: (map['physicalRating'] ?? 1).toInt(),
       notes: map['notes'],
       potencyRating: map['potencyRating'],
     );
