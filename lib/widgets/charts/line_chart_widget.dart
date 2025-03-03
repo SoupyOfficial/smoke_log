@@ -23,6 +23,38 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   ChartRange _selectedRange = ChartRange.daily;
   ChartType _selectedChartType = ChartType.lengthPerHit;
 
+  // Helper method for clean ChartType display names.
+  String _chartTypeDisplayName(ChartType type) {
+    switch (type) {
+      case ChartType.lengthPerHit:
+        return 'Length per Hit';
+      case ChartType.cumulative:
+        return 'Cumulative';
+      case ChartType.thcConcentration:
+        return 'THC Concentration';
+      case ChartType.rolling24h:
+        return 'Rolling 24h';
+      case ChartType.rolling30d:
+        return 'Rolling 30d';
+      case ChartType.rolling90d:
+        return 'Rolling 90d';
+    }
+  }
+
+  // Helper method for clean ChartRange display names.
+  String _chartRangeDisplayName(ChartRange range) {
+    switch (range) {
+      case ChartRange.daily:
+        return 'Daily';
+      case ChartRange.weekly:
+        return 'Weekly';
+      case ChartRange.monthly:
+        return 'Monthly';
+      case ChartRange.yearly:
+        return 'Yearly';
+    }
+  }
+
   ChartConfig getChartConfig() {
     switch (_selectedChartType) {
       case ChartType.thcConcentration:
@@ -123,43 +155,48 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButton<ChartType>(
-              value: _selectedChartType,
-              onChanged: (newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    _selectedChartType = newValue;
-                  });
-                }
-              },
-              items: ChartType.values
-                  .map((chartType) => DropdownMenuItem<ChartType>(
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<ChartType>(
+                    isExpanded: true,
+                    value: _selectedChartType,
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedChartType = newValue;
+                        });
+                      }
+                    },
+                    items: ChartType.values.map((chartType) {
+                      return DropdownMenuItem<ChartType>(
                         value: chartType,
-                        child: Text(
-                            chartType.toString().split('.').last.toUpperCase()),
-                      ))
-                  .toList(),
-            ),
-            const SizedBox(height: 8),
-            DropdownButton<ChartRange>(
-              value: _selectedRange,
-              onChanged: (newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    _selectedRange = newValue;
-                  });
-                }
-              },
-              items: ChartRange.values
-                  .map((chartRange) => DropdownMenuItem<ChartRange>(
+                        child: Text(_chartTypeDisplayName(chartType)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButton<ChartRange>(
+                    isExpanded: true,
+                    value: _selectedRange,
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedRange = newValue;
+                        });
+                      }
+                    },
+                    items: ChartRange.values.map((chartRange) {
+                      return DropdownMenuItem<ChartRange>(
                         value: chartRange,
-                        child: Text(chartRange
-                            .toString()
-                            .split('.')
-                            .last
-                            .toUpperCase()),
-                      ))
-                  .toList(),
+                        child: Text(_chartRangeDisplayName(chartRange)),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             LayoutBuilder(
