@@ -79,33 +79,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return logsAsyncValue.when(
       data: (logs) {
-        final liveThcAsync = ref.watch(liveThcContentProvider);
-        return liveThcAsync.when(
-          data: (liveThc) => Column(
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InfoDisplay(logs: logs, liveThcContent: liveThc),
-              const AddLogForm(),
-            ],
-          ),
-          loading: () => Column(
-            children: [
-              InfoDisplay(logs: logs),
-              const SizedBox(height: 16),
-              const CircularProgressIndicator(),
-              const AddLogForm(),
-            ],
-          ),
-          error: (error, stack) => Column(
-            children: [
-              InfoDisplay(logs: logs),
-              Text('Error: $error'),
-              const AddLogForm(),
+              Builder(
+                builder: (context) {
+                  final liveThcAsync = ref.watch(liveThcContentProvider);
+                  return liveThcAsync.when(
+                    data: (liveThc) => Column(
+                      children: [
+                        InfoDisplay(logs: logs, liveThcContent: liveThc),
+                        const AddLogForm(),
+                      ],
+                    ),
+                    loading: () => Column(
+                      children: [
+                        InfoDisplay(logs: logs),
+                        const SizedBox(height: 16),
+                        const CircularProgressIndicator(),
+                        const AddLogForm(),
+                      ],
+                    ),
+                    error: (error, stack) => Column(
+                      children: [
+                        InfoDisplay(logs: logs),
+                        Text('Error: $error'),
+                        const AddLogForm(),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text('Error: $error')),
+      error: (e, stack) => Center(child: Text('Error: $e')),
     );
   }
 

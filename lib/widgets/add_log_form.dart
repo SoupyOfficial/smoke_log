@@ -6,6 +6,7 @@ import '../models/log.dart';
 import '../providers/log_providers.dart';
 import '../providers/dropdown_options_provider.dart';
 import '../models/reason_option.dart';
+import 'rating_slider.dart'; // add this import
 
 class AddLogForm extends ConsumerStatefulWidget {
   const AddLogForm({super.key});
@@ -183,44 +184,31 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 16),
-            // Use the Firestore options for the multi-select chips.
             _buildDropdownOptions(),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Mood: $_moodRating'),
-                      Slider(
-                        value: _moodRating.toDouble(),
-                        min: 1,
-                        max: 10,
-                        divisions: 9,
-                        label: '$_moodRating',
-                        onChanged: (value) =>
-                            setState(() => _moodRating = value.toInt()),
-                      ),
-                    ],
+                  child: RatingSlider(
+                    label: 'Mood',
+                    value: _moodRating,
+                    onChanged: (val) {
+                      setState(() {
+                        _moodRating = val;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Physical: $_physicalRating'),
-                      Slider(
-                        value: _physicalRating.toDouble(),
-                        min: 1,
-                        max: 10,
-                        divisions: 9,
-                        label: '$_physicalRating',
-                        onChanged: (value) =>
-                            setState(() => _physicalRating = value.toInt()),
-                      ),
-                    ],
+                  child: RatingSlider(
+                    label: 'Physical',
+                    value: _physicalRating,
+                    onChanged: (val) {
+                      setState(() {
+                        _physicalRating = val;
+                      });
+                    },
                   ),
                 ),
               ],
