@@ -48,7 +48,7 @@ class InfoDisplay extends StatelessWidget {
         .fold<int>(0, (sum, log) => sum + log.durationSeconds);
 
     // Use the live value if available; otherwise, fallback to aggregates.
-    final thcValue = (liveThcContent ?? aggregates.thcContent) as double;
+    final thcValue = (liveThcContent ?? aggregates.thcContent);
 
     return Card(
       margin: const EdgeInsets.all(16.0),

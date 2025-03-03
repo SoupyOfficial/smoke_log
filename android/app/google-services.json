@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "660497517730",
+    "project_id": "smokelog-17303",
+    "storage_bucket": "smokelog-17303.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660497517730:android:f8f78923e0a271d2c91bfb",
+        "android_client_info": {
+          "package_name": "com.example.smoke_log"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNDi4cZWPXDWfSmjIcJdAgU7xRa9sIpbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "660497517730-8rd4rplsqe9a37mnd4biui6itrq89bo2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "MobileApp.Smoke-Log"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660497517730:android:69b24f14a7939d26c91bfb",
+        "android_client_info": {
+          "package_name": "com.example.smoke_log2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNDi4cZWPXDWfSmjIcJdAgU7xRa9sIpbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "660497517730-8rd4rplsqe9a37mnd4biui6itrq89bo2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "MobileApp.Smoke-Log"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

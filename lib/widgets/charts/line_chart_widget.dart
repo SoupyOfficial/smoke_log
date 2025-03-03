@@ -10,10 +10,10 @@ class LineChartWidget extends StatefulWidget {
   final List<Log> logs;
   final DataProcessor dataProcessor;
   const LineChartWidget({
-    Key? key,
+    super.key,
     required this.logs,
     required this.dataProcessor,
-  }) : super(key: key);
+  });
 
   @override
   _LineChartWidgetState createState() => _LineChartWidgetState();

@@ -8,12 +8,12 @@ class UserSwitcher extends StatelessWidget {
   final String authType;
 
   const UserSwitcher({
-    Key? key,
+    super.key,
     required this.accounts,
     required this.currentEmail,
     required this.onSwitchAccount,
     required this.authType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +51,10 @@ class UserSwitcher extends StatelessWidget {
             );
           }),
           const PopupMenuDivider(),
-          PopupMenuItem<String>(
+          const PopupMenuItem<String>(
             value: 'Add Account',
             child: Row(
-              children: const [
+              children: [
                 Icon(Icons.person_add, size: 18),
                 SizedBox(width: 8),
                 Text('Add Account'),

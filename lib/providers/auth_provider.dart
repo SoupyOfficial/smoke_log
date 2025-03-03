@@ -11,7 +11,7 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn(
     clientId:
-        '660497517730-f6mls4r57gm55n75d12coof7eqptgniv.apps.googleusercontent.com',
+        '660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com',
   );
 });
 

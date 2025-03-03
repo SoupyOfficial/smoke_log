@@ -11,9 +11,9 @@ class CustomAppBar extends ConsumerStatefulWidget
   final String title;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<CustomAppBar> createState() => _CustomAppBarState();

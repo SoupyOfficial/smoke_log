@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
@@ -45,39 +42,48 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAUKmg4H7yaizxJK8aWW2wqFGA-iTnT56s',
-    appId: '1:660497517730:web:d74577c345707af6c91bfb',
-    messagingSenderId: '660497517730',
-    projectId: 'smokelog-17303',
-    authDomain: 'smokelog-17303.firebaseapp.com',
-    storageBucket: 'smokelog-17303.appspot.com',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCNDi4cZWPXDWfSmjIcJdAgU7xRa9sIpbE',
-    appId: '1:660497517730:android:69b24f14a7939d26c91bfb',
-    messagingSenderId: '660497517730',
-    projectId: 'smokelog-17303',
-    storageBucket: 'smokelog-17303.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY',
-    appId: '1:660497517730:ios:e53ecd3098f2d860c91bfb',
-    messagingSenderId: '660497517730',
-    authDomain: 'smokelog-17303.firebaseapp.com',
-    projectId: 'smokelog-17303',
-    storageBucket: 'smokelog-17303.appspot.com',
-    iosClientId:
-        '660497517730-j7miasb7u60ifg93f3pru8gcm45kg4bm.apps.googleusercontent.com',
-    iosBundleId: 'com.example.smokeLog2',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAUKmg4H7yaizxJK8aWW2wqFGA-iTnT56s',
     appId: '1:660497517730:web:601780f35bb39a0ec91bfb',
     messagingSenderId: '660497517730',
     projectId: 'smokelog-17303',
     authDomain: 'smokelog-17303.firebaseapp.com',
-    storageBucket: 'smokelog-17303.appspot.com',
+    storageBucket: 'smokelog-17303.firebasestorage.app',
   );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyCNDi4cZWPXDWfSmjIcJdAgU7xRa9sIpbE',
+    appId: '1:660497517730:android:f8f78923e0a271d2c91bfb',
+    messagingSenderId: '660497517730',
+    projectId: 'smokelog-17303',
+    storageBucket: 'smokelog-17303.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY',
+    appId: '1:660497517730:ios:ec672c856d4780a2c91bfb',
+    messagingSenderId: '660497517730',
+    projectId: 'smokelog-17303',
+    storageBucket: 'smokelog-17303.firebasestorage.app',
+    iosClientId: '660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com',
+    iosBundleId: 'com.example.smokeLog',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBSc89SEMjq4XD3HluQX06OJoGmjzZpg3I',
+    appId: '1:660497517730:web:552ee2054f59d910c91bfb',
+    messagingSenderId: '660497517730',
+    projectId: 'smokelog-17303',
+    authDomain: 'smokelog-17303.firebaseapp.com',
+    storageBucket: 'smokelog-17303.firebasestorage.app',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY',
+    appId: '1:660497517730:ios:ec672c856d4780a2c91bfb',
+    messagingSenderId: '660497517730',
+    projectId: 'smokelog-17303',
+    storageBucket: 'smokelog-17303.firebasestorage.app',
+    iosClientId: '660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com',
+    iosBundleId: 'com.example.smokeLog',
+  );
+
 }
