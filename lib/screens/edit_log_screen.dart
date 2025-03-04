@@ -5,6 +5,7 @@ import '../models/reason_option.dart';
 import '../providers/dropdown_options_provider.dart';
 import '../services/log_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../utils/format_utils.dart';
 
 class EditLogScreen extends ConsumerStatefulWidget {
   final Log log;
@@ -143,7 +144,7 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
 
               // Duration field
               TextFormField(
-                initialValue: _durationSeconds.toString(),
+                initialValue: formatSecondsDisplay(_durationSeconds),
                 decoration: const InputDecoration(
                   labelText: 'Duration (seconds)',
                   border: OutlineInputBorder(),
@@ -161,7 +162,7 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
                 onChanged: (value) {
                   double? parsed = double.tryParse(value);
                   if (parsed != null) {
-                    _durationSeconds = parsed;
+                    _durationSeconds = parsed; // Store full precision
                   }
                 },
               ),

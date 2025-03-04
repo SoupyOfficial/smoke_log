@@ -13,7 +13,9 @@ class LogAggregates {
 
   // Returns a human-readable format for the total seconds today.
   String get formattedTotalSecondsToday {
-    if (totalSecondsToday < 60) return '$totalSecondsToday seconds';
+    if (totalSecondsToday < 60) {
+      return '${totalSecondsToday.toStringAsFixed(2)} seconds';
+    }
     if (totalSecondsToday < 3600) {
       final minutes = totalSecondsToday ~/ 60;
       return '$minutes ${minutes == 1 ? "minute" : "minutes"}';

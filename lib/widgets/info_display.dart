@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/log.dart';
 import '../models/log_aggregates.dart';
+import '../utils/format_utils.dart';
 
 class InfoDisplay extends StatelessWidget {
   final List<Log> logs;
@@ -75,6 +76,11 @@ class InfoDisplay extends StatelessWidget {
               'Current THC Content: ${thcValue.toStringAsFixed(4)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            const SizedBox(height: 8),
+            // Text(
+            //   'Duration: ${formatSecondsDisplay(log.durationSeconds)} seconds',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
           ],
         ),
       ),
