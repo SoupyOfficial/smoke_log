@@ -20,6 +20,7 @@ dependencies:
   fl_chart: ^0.68.0
   flutter_secure_storage: ^9.2.4
   font_awesome_flutter: ^10.8.0
+  shared_preferences: ^2.5.2
 
 dev_dependencies:
   integration_test:

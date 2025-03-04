@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import '../screens/login_screen.dart';
 import '../services/credential_service.dart';
+import 'theme_toggle_switch.dart';
 import 'user_switcher.dart';
 
 class CustomAppBar extends ConsumerStatefulWidget
@@ -92,6 +93,7 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                 );
               },
             ),
+            const ThemeToggleSwitch(),
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () => _signOut(),

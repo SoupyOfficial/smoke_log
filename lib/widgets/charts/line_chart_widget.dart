@@ -151,7 +151,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
 
     try {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(
+            horizontal: 8.0, vertical: 4.0), // Reduced vertical padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -160,6 +161,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 Expanded(
                   child: DropdownButton<ChartType>(
                     isExpanded: true,
+                    isDense: true, // Make dropdown more compact
                     value: _selectedChartType,
                     onChanged: (newValue) {
                       if (newValue != null) {
@@ -180,6 +182,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 Expanded(
                   child: DropdownButton<ChartRange>(
                     isExpanded: true,
+                    isDense: true, // Make dropdown more compact
                     value: _selectedRange,
                     onChanged: (newValue) {
                       if (newValue != null) {
@@ -198,21 +201,19 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final height = constraints.hasBoundedHeight
-                    ? constraints.maxHeight
-                    : 300.0;
-                return SizedBox(
-                  height: height,
-                  child: LineChart(
+            const SizedBox(height: 4), // Reduced spacing
+            Expanded(
+              // Wrap the chart in Expanded
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return LineChart(
                     LineChartData(
                       lineBarsData: [
                         LineChartBarData(
                           isCurved: false,
                           dotData: FlDotData(show: chartConfig.showDots),
-                          color: Theme.of(context).highlightColor,
+                          // Use theme-aware colors
+                          color: Theme.of(context).colorScheme.secondary,
                           barWidth: 4,
                           belowBarData: BarAreaData(
                             show: true,
@@ -343,9 +344,9 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -59,6 +59,10 @@ Future<void> main(List<String> args) async {
     // print('Usage: dart run lib/scripts/clone_jacob_logs.dart <testUserId>');
     // exit(1);
 
+    // For testing purposes, use a default test user ID: '1Wu1BALZOiXlGHtzuVgCEic0Ecw1'.
+
+    // For Jacob: 'dITGZvTvcQOWllfaGvl6P6v6ACG3'
+    // For Ashley: 'ASPNSoa8JQYuhXRBCQS2o1C35pW2'
     args.add('1Wu1BALZOiXlGHtzuVgCEic0Ecw1');
   }
 
