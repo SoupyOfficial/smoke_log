@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Log {
   final String? id;
-  final DateTime timestamp;
-  final int durationSeconds;
-  final List<String> reason;
+  final dynamic timestamp; // Firestore timestamp
+  final double durationSeconds;
   final int moodRating;
   final int physicalRating;
+  final int? potencyRating;
   final String? notes;
-  final int potencyRating;
+  final List<String>? reason;
 
   Log({
     this.id,
@@ -25,7 +25,9 @@ class Log {
     return Log(
       id: docId,
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-      durationSeconds: map['durationSeconds'] ?? 0,
+      durationSeconds: map['durationSeconds'] is String
+          ? double.tryParse(map['durationSeconds']) ?? 0.0
+          : (map['durationSeconds'] ?? 0.0).toDouble(),
       reason: map['reason'] is List
           ? List<String>.from(map['reason'])
           : [map['reason'] ?? ''],
@@ -58,5 +60,27 @@ class Log {
       'physicalRating': physicalRating,
       'notes': notes,
     };
+  }
+
+  Log copyWith({
+    String? id,
+    dynamic timestamp,
+    double? durationSeconds,
+    List<String>? reason,
+    int? moodRating,
+    int? physicalRating,
+    String? notes,
+    int? potencyRating,
+  }) {
+    return Log(
+      id: id ?? this.id,
+      timestamp: timestamp ?? this.timestamp,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      reason: reason ?? this.reason,
+      moodRating: moodRating ?? this.moodRating,
+      physicalRating: physicalRating ?? this.physicalRating,
+      notes: notes ?? this.notes,
+      potencyRating: potencyRating ?? this.potencyRating,
+    );
   }
 }

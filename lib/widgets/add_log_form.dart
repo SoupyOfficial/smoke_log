@@ -59,7 +59,7 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
       if (_durationSeconds > 0) {
         final log = Log(
           timestamp: DateTime.now(),
-          durationSeconds: _durationSeconds.round(), // Round for storage
+          durationSeconds: _durationSeconds, // Round for storage
           reason: _selectedReasons,
           moodRating: _moodRating,
           physicalRating: _physicalRating,

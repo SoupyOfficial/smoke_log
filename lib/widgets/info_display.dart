@@ -18,7 +18,7 @@ class InfoDisplay extends StatelessWidget {
 
     // Helper to format a Duration as HH:MM:SS.
     String formatDurationHHMMSS(Duration duration) {
-      String twoDigits(int n) => n.toString().padLeft(2, '0');
+      String twoDigits(dynamic n) => n.toString().padLeft(2, '0');
       final hours = twoDigits(duration.inHours);
       final minutes = twoDigits(duration.inMinutes.remainder(60));
       final seconds = twoDigits(duration.inSeconds.remainder(60));
@@ -30,10 +30,10 @@ class InfoDisplay extends StatelessWidget {
     final timeSinceLastHit = DateTime.now().difference(lastHitTime);
 
     // Other helper for formatting duration (ex: Total Length Display) remains
-    String formatNormalDuration(int seconds) {
-      if (seconds < 60) return '$seconds seconds';
+    String formatNormalDuration(double seconds) {
+      if (seconds < 60) return '${seconds.toStringAsFixed(2)} seconds';
       if (seconds < 3600) {
-        final minutes = seconds ~/ 60;
+        final minutes = seconds / 60;
         return '$minutes ${minutes == 1 ? "minute" : "minutes"}';
       }
       final hours = seconds ~/ 3600;
@@ -45,8 +45,7 @@ class InfoDisplay extends StatelessWidget {
     final cutoff = now.subtract(const Duration(hours: 24));
     final totalSecondsLast24 = logs
         .where((log) => log.timestamp.isAfter(cutoff))
-        .fold<int>(0, (sum, log) => sum + log.durationSeconds);
-
+        .fold<double>(0.0, (sum, log) => sum + log.durationSeconds);
     // Use the live value if available; otherwise, fallback to aggregates.
     final thcValue = (liveThcContent ?? aggregates.thcContent);
 

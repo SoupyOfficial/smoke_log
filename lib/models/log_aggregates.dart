@@ -2,7 +2,7 @@ import 'log.dart';
 
 class LogAggregates {
   final DateTime? lastHit;
-  final int totalSecondsToday;
+  final double totalSecondsToday;
   final double thcContent;
 
   LogAggregates({
@@ -41,7 +41,7 @@ class LogAggregates {
 
     final totalSeconds = logs
         .where((log) => log.timestamp.isAfter(todayStart))
-        .fold<int>(0, (sum, log) => sum + log.durationSeconds);
+        .fold<double>(0, (sum, log) => sum + log.durationSeconds);
 
     // Example THC content calculation. You may replace this with your own logic.
     final double thcContent =

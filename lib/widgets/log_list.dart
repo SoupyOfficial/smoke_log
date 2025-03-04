@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/log.dart';
+import '../screens/edit_log_screen.dart';
 
 class LogList extends StatelessWidget {
   final List<Log> logs;
@@ -52,6 +53,26 @@ class LogList extends StatelessWidget {
                   child: ListTile(
                     title: Text(_dateFormat.format(log.timestamp)),
                     subtitle: Text('${log.durationSeconds}s'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditLogScreen(log: log),
+                          ),
+                        );
+                      },
+                    ),
+                    onTap: () {
+                      // Navigate to the edit screen when the list item is tapped
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditLogScreen(log: log),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
