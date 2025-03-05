@@ -74,10 +74,14 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Current THC Content: ${thcValue.toStringAsFixed(4)}',
+              'Current THC Content: ${thcValue > 0.0001 ? thcValue.toStringAsFixed(4) : "Loading..."}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 8),
+            // const SizedBox(height: 8),
+            // Text(
+            //   'Logs available: ${logs.length}',
+            //   style: Theme.of(context).textTheme.bodySmall,
+            // ),
             // Text(
             //   'Duration: ${formatSecondsDisplay(log.durationSeconds)} seconds',
             //   style: Theme.of(context).textTheme.bodyMedium,
