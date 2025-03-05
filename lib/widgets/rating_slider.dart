@@ -6,6 +6,7 @@ class RatingSlider extends StatelessWidget {
   final int min;
   final int max;
   final int divisions;
+  final Color? activeColor;
   final ValueChanged<int> onChanged;
 
   const RatingSlider({
@@ -15,6 +16,7 @@ class RatingSlider extends StatelessWidget {
     this.min = 1,
     this.max = 10,
     this.divisions = 9,
+    this.activeColor,
     required this.onChanged,
   }) : super(key: key);
 
@@ -41,6 +43,7 @@ class RatingSlider extends StatelessWidget {
             max: max.toDouble(),
             divisions: divisions,
             label: '$value',
+            activeColor: activeColor ?? Theme.of(context).primaryColor,
             onChanged: (newValue) => onChanged(newValue.toInt()),
           ),
         ),

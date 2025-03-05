@@ -22,8 +22,8 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
   static const int _longPressDelay = 500; // milliseconds
   final _notesController = TextEditingController();
   List<String> _selectedReasons = [];
-  int _moodRating = 7;
-  int _physicalRating = 7;
+  int _moodRating = -1;
+  int _physicalRating = -1;
 
   void _startTimer() {
     setState(() {
@@ -191,25 +191,48 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
                 Expanded(
                   child: RatingSlider(
                     label: 'Mood',
-                    value: _moodRating,
+                    value: _moodRating == -1 ? 5 : _moodRating,
                     onChanged: (val) {
                       setState(() {
                         _moodRating = val;
                       });
                     },
+                    activeColor: _moodRating == -1 ? Colors.grey : Colors.blue,
                   ),
                 ),
-                const SizedBox(width: 16),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    setState(() {
+                      _moodRating = -1;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
                 Expanded(
                   child: RatingSlider(
                     label: 'Physical',
-                    value: _physicalRating,
+                    value: _physicalRating == -1 ? 5 : _physicalRating,
                     onChanged: (val) {
                       setState(() {
                         _physicalRating = val;
                       });
                     },
+                    activeColor:
+                        _physicalRating == -1 ? Colors.grey : Colors.blue,
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    setState(() {
+                      _physicalRating = -1;
+                    });
+                  },
                 ),
               ],
             ),
