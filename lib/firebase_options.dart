@@ -41,8 +41,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAUKmg4H7yaizxJK8aWW2wqFGA-iTnT56s',
-    appId: '1:660497517730:web:601780f35bb39a0ec91bfb',
+    apiKey: 'AIzaSyBSc89SEMjq4XD3HluQX06OJoGmjzZpg3I',
+    appId: '1:660497517730:web:552ee2054f59d910c91bfb',
     messagingSenderId: '660497517730',
     projectId: 'smokelog-17303',
     authDomain: 'smokelog-17303.firebaseapp.com',
@@ -59,12 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY',
-    appId: '1:660497517730:ios:ec672c856d4780a2c91bfb',
+    appId: '1:660497517730:ios:080b2913397ea739c91bfb',
     messagingSenderId: '660497517730',
     projectId: 'smokelog-17303',
     storageBucket: 'smokelog-17303.firebasestorage.app',
-    iosClientId: '660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com',
-    iosBundleId: 'com.example.smokeLog',
+    iosClientId: '660497517730-dlv557f6uvb4ccre13gcrpcqf8cgg2r0.apps.googleusercontent.com',
+    iosBundleId: 'com.soup.smokeLog',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -78,12 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY',
-    appId: '1:660497517730:ios:ec672c856d4780a2c91bfb',
+    appId: '1:660497517730:ios:080b2913397ea739c91bfb',
     messagingSenderId: '660497517730',
     projectId: 'smokelog-17303',
     storageBucket: 'smokelog-17303.firebasestorage.app',
-    iosClientId: '660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com',
-    iosBundleId: 'com.example.smokeLog',
+    iosClientId: '660497517730-dlv557f6uvb4ccre13gcrpcqf8cgg2r0.apps.googleusercontent.com',
+    iosBundleId: 'com.soup.smokeLog',
   );
 
 }

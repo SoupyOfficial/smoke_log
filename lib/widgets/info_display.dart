@@ -32,10 +32,11 @@ class InfoDisplay extends StatelessWidget {
 
     // Other helper for formatting duration (ex: Total Length Display) remains
     String formatNormalDuration(double seconds) {
-      if (seconds < 60) return '${seconds.toStringAsFixed(2)} seconds';
+      if (seconds < 60) return '${formatSecondsDisplay(seconds)} seconds';
       if (seconds < 3600) {
-        final minutes = seconds / 60;
-        return '$minutes ${minutes == 1 ? "minute" : "minutes"}';
+        final minutes = seconds ~/ 60;
+        final remainingSeconds = seconds % 60;
+        return '$minutes ${minutes == 1 ? "minute" : "minutes"} ${remainingSeconds.toStringAsFixed(2)} seconds';
       }
       final hours = seconds ~/ 3600;
       final minutes = (seconds % 3600) ~/ 60;

@@ -18,7 +18,8 @@ class LogAggregates {
     }
     if (totalSecondsToday < 3600) {
       final minutes = totalSecondsToday ~/ 60;
-      return '$minutes ${minutes == 1 ? "minute" : "minutes"}';
+      final remainingSeconds = totalSecondsToday % 60;
+      return '$minutes ${minutes == 1 ? "minute" : "minutes"} ${remainingSeconds.toStringAsFixed(2)} seconds';
     }
     final hours = totalSecondsToday ~/ 3600;
     final minutes = (totalSecondsToday % 3600) ~/ 60;

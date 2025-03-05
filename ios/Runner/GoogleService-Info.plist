@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>660497517730-an04u70e9dfg71meco3ev6gvcri684hk.apps.googleusercontent.com</string>
+	<string>660497517730-dlv557f6uvb4ccre13gcrpcqf8cgg2r0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.660497517730-an04u70e9dfg71meco3ev6gvcri684hk</string>
+	<string>com.googleusercontent.apps.660497517730-dlv557f6uvb4ccre13gcrpcqf8cgg2r0</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC7tA65_rkd7G-Kmh_NZAsj3Y5N81YcPHY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.smokeLog</string>
+	<string>com.soup.smokeLog</string>
 	<key>PROJECT_ID</key>
 	<string>smokelog-17303</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:660497517730:ios:ec672c856d4780a2c91bfb</string>
+	<string>1:660497517730:ios:080b2913397ea739c91bfb</string>
 </dict>
 </plist>
