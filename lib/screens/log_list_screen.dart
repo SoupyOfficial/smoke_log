@@ -13,9 +13,6 @@ class LogListScreen extends ConsumerWidget {
     final logsAsyncValue = ref.watch(logsStreamProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Log List'),
-      ),
       body: logsAsyncValue.when(
         data: (logs) {
           return Column(

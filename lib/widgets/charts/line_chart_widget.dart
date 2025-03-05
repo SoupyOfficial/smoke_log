@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 import '../../models/log.dart';
 import 'chart_config.dart';
 import 'chart_data_processors.dart';
@@ -138,16 +139,22 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       }
     }
 
-    final double computedMinY = spots.isEmpty
-        ? 0
-        : spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
-    final double maxY = spots.isEmpty
-        ? 0
-        : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
-    final double minY = (_selectedChartType == ChartType.lengthPerHit ||
-            _selectedChartType == ChartType.cumulative)
-        ? 0
-        : computedMinY;
+    // final double computedMinY = spots.isEmpty
+    //     ? 0
+    //     : spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
+    // final double maxY = spots.isEmpty
+    //     ? 0
+    //     : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
+    // final double minY = (_selectedChartType == ChartType.lengthPerHit ||
+    //         _selectedChartType == ChartType.cumulative)
+    //     ? 0
+    //     : computedMinY;
+
+    double minY = 0;
+    double maxY = 0;
+    if (spots.isNotEmpty) {
+      maxY = spots.map((s) => s.y).reduce(math.max) * 1.25;
+    }
 
     try {
       return Padding(
@@ -159,49 +166,103 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             Row(
               children: [
                 Expanded(
-                  child: DropdownButton<ChartType>(
-                    isExpanded: true,
-                    isDense: true, // Make dropdown more compact
-                    value: _selectedChartType,
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          _selectedChartType = newValue;
-                        });
-                      }
-                    },
-                    items: ChartType.values.map((chartType) {
-                      return DropdownMenuItem<ChartType>(
-                        value: chartType,
-                        child: Text(_chartTypeDisplayName(chartType)),
-                      );
-                    }).toList(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Chart Type',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.5)),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        child: DropdownButton<ChartType>(
+                          isExpanded: true,
+                          isDense: true,
+                          icon: Icon(Icons.bar_chart,
+                              color: Theme.of(context).colorScheme.primary),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          underline: const SizedBox.shrink(),
+                          value: _selectedChartType,
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                _selectedChartType = newValue;
+                              });
+                            }
+                          },
+                          items: ChartType.values.map((chartType) {
+                            return DropdownMenuItem<ChartType>(
+                              value: chartType,
+                              child: Text(_chartTypeDisplayName(chartType)),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: DropdownButton<ChartRange>(
-                    isExpanded: true,
-                    isDense: true, // Make dropdown more compact
-                    value: _selectedRange,
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          _selectedRange = newValue;
-                        });
-                      }
-                    },
-                    items: ChartRange.values.map((chartRange) {
-                      return DropdownMenuItem<ChartRange>(
-                        value: chartRange,
-                        child: Text(_chartRangeDisplayName(chartRange)),
-                      );
-                    }).toList(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Time Range',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.5)),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        child: DropdownButton<ChartRange>(
+                          isExpanded: true,
+                          isDense: true,
+                          icon: Icon(Icons.calendar_today,
+                              color: Theme.of(context).colorScheme.primary),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          underline: const SizedBox.shrink(),
+                          value: _selectedRange,
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                _selectedRange = newValue;
+                              });
+                            }
+                          },
+                          items: ChartRange.values.map((chartRange) {
+                            return DropdownMenuItem<ChartRange>(
+                              value: chartRange,
+                              child: Text(_chartRangeDisplayName(chartRange)),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 4), // Reduced spacing
+            const SizedBox(height: 16),
             Expanded(
               // Wrap the chart in Expanded
               child: LayoutBuilder(
