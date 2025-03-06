@@ -5,6 +5,7 @@ import 'package:smoke_log/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'theme/theme_provider.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
@@ -21,6 +22,19 @@ void main() async {
   // Enable Firestore caching
   FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+
+  // Auto sign-in for development mode
+  if (kDebugMode) {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: 'test@test.com',
+        password: 'test11',
+      );
+      print('Debug mode: Auto signed in with test account');
+    } catch (e) {
+      print('Debug mode: Auto sign-in failed: $e');
+    }
+  }
 
   runApp(
     riverpod.ProviderScope(
