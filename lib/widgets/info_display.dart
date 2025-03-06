@@ -17,6 +17,13 @@ class InfoDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final aggregates = LogAggregates.fromLogs(logs);
 
+    // Use the live value if available; otherwise, fallback to aggregates.
+    final thcValue = (liveThcContent ?? aggregates.thcContent);
+
+    // Debug print to verify the value is being passed correctly
+    print(
+        'InfoDisplay rebuilding with THC value: $thcValue mg (from live provider: ${liveThcContent != null})');
+
     // Helper to format a Duration as HH:MM:SS.
     String formatDurationHHMMSS(Duration duration) {
       String twoDigits(dynamic n) => n.toString().padLeft(2, '0');
@@ -48,8 +55,6 @@ class InfoDisplay extends StatelessWidget {
     final totalSecondsLast24 = logs
         .where((log) => log.timestamp.isAfter(cutoff))
         .fold<double>(0.0, (sum, log) => sum + log.durationSeconds);
-    // Use the live value if available; otherwise, fallback to aggregates.
-    final thcValue = (liveThcContent ?? aggregates.thcContent);
 
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -74,7 +79,7 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Current THC Content: ${thcValue > 0.0001 ? thcValue.toStringAsFixed(4) : "Loading..."}',
+              'Current THC Content: ${thcValue > 0.0001 ? "${thcValue.toStringAsFixed(2)} mg" : "Loading..."}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             // const SizedBox(height: 8),
