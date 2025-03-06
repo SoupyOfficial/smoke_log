@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import '../../models/log.dart';
 import '../../domain/use_cases/thc_calculator.dart';
+import '../../domain/models/thc_advanced_model.dart';
 
 enum ChartRange { daily, weekly, monthly, yearly }
 
@@ -79,6 +80,81 @@ List<FlSpot> thcConcentrationDataProcessor(List<Log> logs, ChartRange range) {
     spots.add(FlSpot(x, y));
     t = t.add(sampleInterval);
   }
+  return spots;
+}
+
+List<FlSpot> advancedThcConcentrationDataProcessor(
+    List<Log> logs, ChartRange range) {
+  final now = DateTime.now();
+  late DateTime startRange, endRange;
+  switch (range) {
+    case ChartRange.daily:
+      startRange = now.subtract(const Duration(hours: 24));
+      endRange = now;
+      break;
+    case ChartRange.weekly:
+      startRange = now.subtract(const Duration(days: 7));
+      endRange = now;
+      break;
+    case ChartRange.monthly:
+      startRange = now.subtract(const Duration(days: 30));
+      endRange = now;
+      break;
+    case ChartRange.yearly:
+      startRange = now.subtract(const Duration(days: 365));
+      endRange = now;
+      break;
+  }
+
+  // Create and configure advanced THC model
+  final thcModel = THCModelNoMgInput();
+
+  // Convert logs to inhalation events
+  for (final log in logs) {
+    // Map log data to inhalation event parameters
+    // Default to joint, but could be enhanced to map reason to method
+    final method = ConsumptionMethod.joint;
+
+    // Use potencyRating as perceived strength if available
+    final perceivedStrength = log.potencyRating != null
+        ? (log.potencyRating! / 5.0).clamp(0.25, 2.0)
+        : 1.0;
+
+    thcModel.logInhalation(
+      timestamp: log.timestamp,
+      method: method,
+      inhaleDurationSec: log.durationSeconds,
+      perceivedStrength: perceivedStrength,
+    );
+  }
+
+  // Generate chart data points
+  final spots = <FlSpot>[];
+  late Duration sampleInterval;
+
+  switch (range) {
+    case ChartRange.daily:
+      sampleInterval = const Duration(minutes: 5);
+      break;
+    case ChartRange.weekly:
+      sampleInterval = const Duration(minutes: 30);
+      break;
+    case ChartRange.monthly:
+      sampleInterval = const Duration(hours: 3);
+      break;
+    case ChartRange.yearly:
+      sampleInterval = const Duration(days: 1);
+      break;
+  }
+
+  DateTime t = startRange;
+  while (t.isBefore(endRange) || t.isAtSameMomentAs(endRange)) {
+    final x = t.millisecondsSinceEpoch.toDouble();
+    final y = thcModel.getTHCContentAtTime(t);
+    spots.add(FlSpot(x, y));
+    t = t.add(sampleInterval);
+  }
+
   return spots;
 }
 

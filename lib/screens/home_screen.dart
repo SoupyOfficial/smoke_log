@@ -86,12 +86,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Builder(
                 builder: (context) {
                   final liveThcAsync = ref.watch(liveThcContentProvider);
+                  final basicThcAsync = ref.watch(basicThcContentProvider);
+
                   return liveThcAsync.when(
-                    data: (liveThc) => Column(
-                      children: [
-                        InfoDisplay(logs: logs, liveThcContent: liveThc),
-                        const AddLogForm(),
-                      ],
+                    data: (liveThc) => basicThcAsync.when(
+                      data: (basicThc) => Column(
+                        children: [
+                          InfoDisplay(
+                            logs: logs,
+                            liveThcContent: liveThc,
+                            liveBasicThcContent: basicThc,
+                          ),
+                          const AddLogForm(),
+                        ],
+                      ),
+                      loading: () => Column(
+                        children: [
+                          InfoDisplay(logs: logs, liveThcContent: liveThc),
+                          const AddLogForm(),
+                        ],
+                      ),
+                      error: (error, stack) => Column(
+                        children: [
+                          InfoDisplay(logs: logs, liveThcContent: liveThc),
+                          Text('Basic THC Error: $error'),
+                          const AddLogForm(),
+                        ],
+                      ),
                     ),
                     loading: () => Column(
                       children: [
@@ -104,7 +125,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     error: (error, stack) => Column(
                       children: [
                         InfoDisplay(logs: logs),
-                        Text('Error: $error'),
+                        Text('Advanced THC Error: $error'),
                         const AddLogForm(),
                       ],
                     ),

@@ -32,7 +32,9 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       case ChartType.cumulative:
         return 'Cumulative';
       case ChartType.thcConcentration:
-        return 'THC Concentration';
+        return 'Raw THC Content';
+      case ChartType.advancedThcConcentration:
+        return 'Psycoactive THC Content';
       case ChartType.rolling24h:
         return 'Rolling 24h';
       case ChartType.rolling30d:
@@ -73,6 +75,15 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           leftTitleFormatter: (value) => '${value.toStringAsFixed(0)} s',
           tooltipLabel: (value) =>
               'Cumulative Usage: ${value.toStringAsFixed(2)}',
+        );
+      case ChartType.advancedThcConcentration:
+        return ChartConfig(
+          dataProcessor: advancedThcConcentrationDataProcessor,
+          showDots: false,
+          leftTitleFormatter: (value) =>
+              value.toStringAsFixed(3), // More precision for mg values
+          tooltipLabel: (value) =>
+              'THC Content: ${value.toStringAsFixed(3)} mg',
         );
       default:
         return ChartConfig(

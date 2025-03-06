@@ -6,11 +6,13 @@ import '../utils/format_utils.dart';
 class InfoDisplay extends StatelessWidget {
   final List<Log> logs;
   final double? liveThcContent;
+  final double? liveBasicThcContent; // New parameter for basic THC model
 
   const InfoDisplay({
     super.key,
     required this.logs,
     this.liveThcContent,
+    this.liveBasicThcContent, // Add this parameter
   });
 
   @override
@@ -19,6 +21,7 @@ class InfoDisplay extends StatelessWidget {
 
     // Use the live value if available; otherwise, fallback to aggregates.
     final thcValue = (liveThcContent ?? aggregates.thcContent);
+    final basicThcValue = (liveBasicThcContent ?? aggregates.thcContent);
 
     // Debug print to verify the value is being passed correctly
     // print(
@@ -79,7 +82,12 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Current THC Content: ${thcValue > 0.0001 ? "${thcValue.toStringAsFixed(3)} fg" : "Loading..."}',
+              'Raw THC Content: ${basicThcValue > 0.0001 ? "${basicThcValue.toStringAsFixed(3)} fg" : "Loading..."}',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Psychoactive THC Content: ${thcValue > 0.0001 ? "${thcValue.toStringAsFixed(3)} mg" : "Loading..."}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             // const SizedBox(height: 8),

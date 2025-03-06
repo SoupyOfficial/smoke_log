@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/models/thc_advanced_model.dart';
-import '../domain/adapters/log_to_inhalation_adapter.dart';
 import '../models/log.dart';
+import '../domain/use_cases/thc_calculator.dart'; // For basic THC model
+import '../domain/models/thc_advanced_model.dart'; // For advanced THC model
 import 'log_providers.dart';
 
 // Provider for user demographic settings
@@ -29,17 +29,12 @@ final thcModelProvider = Provider<THCModelNoMgInput>((ref) {
   );
 });
 
-// Live THC content provider using the new model
+// Advanced THC content provider (existing)
 final liveThcContentProvider = StreamProvider<double>((ref) {
-  // Controller that emits the current THC value
   final controller = StreamController<double>();
 
-  // Get the THC model instance
-  final thcModel = ref.watch(thcModelProvider);
-
-  // Create a timer that recalculates THC content periodically
   final timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
-    // Get the latest logs on every tick
+    // Get the latest logs
     final logsAsyncValue = ref.read(logsStreamProvider);
     final currentLogs = logsAsyncValue.when(
       data: (logs) => logs,
@@ -47,20 +42,59 @@ final liveThcContentProvider = StreamProvider<double>((ref) {
       error: (_, __) => [],
     );
 
-    // Convert logs to inhalation events and populate the model
-    final events = LogToInhalationAdapter.convertLogs(currentLogs.cast<Log>());
+    // Create advanced THC model with current logs
+    final thcModel = THCModelNoMgInput();
 
-    // Update the model with the new events
-    thcModel.updateEvents(events);
+    // Convert logs to inhalation events
+    for (final log in currentLogs) {
+      // Map log data to inhalation event parameters
+      final method = ConsumptionMethod.joint;
+      final perceivedStrength = log.potencyRating != null
+          ? (log.potencyRating! / 5.0).clamp(0.25, 2.0)
+          : 1.0;
 
-    // Calculate current THC content
+      thcModel.logInhalation(
+        timestamp: log.timestamp,
+        method: method,
+        inhaleDurationSec: log.durationSeconds,
+        perceivedStrength: perceivedStrength,
+      );
+    }
+
+    // Get current THC content
     final currentTHC = thcModel.getTHCContentAtTime(DateTime.now());
+
+    controller.add(currentTHC);
+  });
+
+  ref.onDispose(() {
+    timer.cancel();
+    controller.close();
+  });
+
+  return controller.stream;
+});
+
+// Basic THC content provider (new)
+final basicThcContentProvider = StreamProvider<double>((ref) {
+  final controller = StreamController<double>();
+
+  final timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+    // Get the latest logs
+    final logsAsyncValue = ref.read(logsStreamProvider);
+    final currentLogs = logsAsyncValue.when(
+      data: (logs) => logs,
+      loading: () => [],
+      error: (_, __) => [],
+    );
+
+    // Calculate basic THC content using the simpler model
+    final thcCalculator = THCConcentration(logs: currentLogs as List<Log>);
+    final currentTHC = thcCalculator
+        .calculateTHCAtTime(DateTime.now().millisecondsSinceEpoch.toDouble());
 
     // Add the value to the stream
     controller.add(currentTHC);
-
-    // Inside timer callback
-    // print('Processing ${currentLogs.length} logs, THC content: $currentTHC mg');
   });
 
   // Clean up when the provider is disposed

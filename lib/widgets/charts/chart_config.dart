@@ -6,6 +6,7 @@ enum ChartType {
   lengthPerHit,
   cumulative,
   thcConcentration,
+  advancedThcConcentration, // New type
   rolling24h,
   rolling30d,
   rolling90d,
