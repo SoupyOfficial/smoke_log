@@ -19,7 +19,7 @@ double determineBottomInterval(ChartRange range, ChartType chartType) {
   }
   switch (range) {
     case ChartRange.daily:
-      return 60 * 60 * 1000; // Changed from 30 minutes to 60 minutes
+      return 2 * 60 * 60 * 1000; // Changed from 1 hour to 2 hours
     case ChartRange.weekly:
       return 24 * 3600 * 1000; // 1 day.
     case ChartRange.monthly:
