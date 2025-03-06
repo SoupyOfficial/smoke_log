@@ -44,11 +44,11 @@ class THCConcentration {
     for (Log log in logs) {
       double logTime = log.timestamp.millisecondsSinceEpoch.toDouble();
       // Convert duration from seconds to milliseconds.
-      double logDuration = log.durationSeconds.toDouble();
+      double logDurationInMillis = log.durationSeconds.toDouble() * 1000;
 
       // Calculate the absorbed THC for this log event.
       double absorbedTHC = absorptionCoefficient *
-          (1 - exp(-absorptionRateConstant * logDuration));
+          (1 - exp(-absorptionRateConstant * logDurationInMillis));
 
       double timeSinceLog = t - logTime;
 
@@ -59,6 +59,6 @@ class THCConcentration {
       }
     }
 
-    return thcConcentration > 0 ? thcConcentration * 1000000 : 0.0;
+    return thcConcentration > 0 ? thcConcentration * 1000 : 0.0;
   }
 }
