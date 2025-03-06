@@ -21,8 +21,8 @@ class InfoDisplay extends StatelessWidget {
     final thcValue = (liveThcContent ?? aggregates.thcContent);
 
     // Debug print to verify the value is being passed correctly
-    print(
-        'InfoDisplay rebuilding with THC value: $thcValue mg (from live provider: ${liveThcContent != null})');
+    // print(
+    //     'InfoDisplay rebuilding with THC value: $thcValue mg (from live provider: ${liveThcContent != null})');
 
     // Helper to format a Duration as HH:MM:SS.
     String formatDurationHHMMSS(Duration duration) {
@@ -79,7 +79,7 @@ class InfoDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Current THC Content: ${thcValue > 0.0001 ? "${thcValue.toStringAsFixed(2)} mg" : "Loading..."}',
+              'Current THC Content: ${thcValue > 0.0001 ? "${thcValue.toStringAsFixed(3)} fg" : "Loading..."}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             // const SizedBox(height: 8),

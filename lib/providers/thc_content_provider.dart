@@ -38,7 +38,7 @@ final liveThcContentProvider = StreamProvider<double>((ref) {
   final thcModel = ref.watch(thcModelProvider);
 
   // Create a timer that recalculates THC content periodically
-  final timer = Timer.periodic(const Duration(milliseconds: 150), (_) {
+  final timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
     // Get the latest logs on every tick
     final logsAsyncValue = ref.read(logsStreamProvider);
     final currentLogs = logsAsyncValue.when(

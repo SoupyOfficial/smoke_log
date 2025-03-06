@@ -218,7 +218,7 @@ class THCModelNoMgInput {
       }
     }
 
-    return totalMg;
+    return totalMg * 1000000000000.0;
   }
 
   /// Convenience method to query THC content using a DateTime.
