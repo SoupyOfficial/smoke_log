@@ -6,6 +6,7 @@ import '../widgets/custom_app_bar.dart';
 import '../providers/log_providers.dart';
 import '../widgets/add_log_form.dart';
 import '../widgets/info_display.dart';
+import '../widgets/rating_slider.dart';
 import 'log_list_screen.dart';
 import '../providers/thc_content_provider.dart';
 import '../models/log.dart';
@@ -58,8 +59,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final durationController = TextEditingController();
     final notesController = TextEditingController();
     List<String> selectedReasons = [];
-    int moodRating = 5;
-    int physicalRating = 5;
+    int moodRating = -1; // Change from 5 to -1
+    int physicalRating = -1; // Change from 5 to -1
 
     // For error handling
     bool showError = false;
@@ -318,19 +319,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                           // Mood rating
                           StatefulBuilder(builder: (context, setState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            return Row(
                               children: [
-                                Text('Mood rating: $moodRating'),
-                                Slider(
-                                  value: moodRating.toDouble(),
-                                  min: 0,
-                                  max: 10,
-                                  divisions: 10,
-                                  label: moodRating.toString(),
-                                  onChanged: (value) {
+                                Expanded(
+                                  child: RatingSlider(
+                                    label: 'Mood',
+                                    value: moodRating == -1 ? 5 : moodRating,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        moodRating = val;
+                                      });
+                                    },
+                                    activeColor: moodRating == -1
+                                        ? Colors.grey
+                                        : Colors.blue,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () {
                                     setState(() {
-                                      moodRating = value.round();
+                                      moodRating = -1;
                                     });
                                   },
                                 ),
@@ -341,19 +350,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                           // Physical rating
                           StatefulBuilder(builder: (context, setState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            return Row(
                               children: [
-                                Text('Physical rating: $physicalRating'),
-                                Slider(
-                                  value: physicalRating.toDouble(),
-                                  min: 0,
-                                  max: 10,
-                                  divisions: 10,
-                                  label: physicalRating.toString(),
-                                  onChanged: (value) {
+                                Expanded(
+                                  child: RatingSlider(
+                                    label: 'Physical',
+                                    value: physicalRating == -1
+                                        ? 5
+                                        : physicalRating,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        physicalRating = val;
+                                      });
+                                    },
+                                    activeColor: physicalRating == -1
+                                        ? Colors.grey
+                                        : Colors.blue,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () {
                                     setState(() {
-                                      physicalRating = value.round();
+                                      physicalRating = -1;
                                     });
                                   },
                                 ),

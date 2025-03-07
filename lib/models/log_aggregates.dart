@@ -1,4 +1,5 @@
 import 'log.dart';
+import '../utils/format_utils.dart';
 
 class LogAggregates {
   final DateTime? lastHit;
@@ -13,17 +14,7 @@ class LogAggregates {
 
   // Returns a human-readable format for the total seconds today.
   String get formattedTotalSecondsToday {
-    if (totalSecondsToday < 60) {
-      return '${totalSecondsToday.toStringAsFixed(2)} seconds';
-    }
-    if (totalSecondsToday < 3600) {
-      final minutes = totalSecondsToday ~/ 60;
-      final remainingSeconds = totalSecondsToday % 60;
-      return '$minutes ${minutes == 1 ? "minute" : "minutes"} ${remainingSeconds.toStringAsFixed(2)} seconds';
-    }
-    final hours = totalSecondsToday ~/ 3600;
-    final minutes = (totalSecondsToday % 3600) ~/ 60;
-    return '$hours ${hours == 1 ? "hour" : "hours"} $minutes ${minutes == 1 ? "minute" : "minutes"}';
+    return formatDurationHHMMSS(totalSecondsToday, detailed: true);
   }
 
   /// Creates aggregates from the given list of logs.

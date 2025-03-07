@@ -27,31 +27,20 @@ class InfoDisplay extends StatelessWidget {
     // print(
     //     'InfoDisplay rebuilding with THC value: $thcValue mg (from live provider: ${liveThcContent != null})');
 
-    // Helper to format a Duration as HH:MM:SS.
-    String formatDurationHHMMSS(Duration duration) {
-      String twoDigits(dynamic n) => n.toString().padLeft(2, '0');
-      final hours = twoDigits(duration.inHours);
-      final minutes = twoDigits(duration.inMinutes.remainder(60));
-      final seconds = twoDigits(duration.inSeconds.remainder(60));
-      return "$hours:$minutes:$seconds";
-    }
+    // // Helper to format a Duration as HH:MM:SS.
+    // String formatDurationHHMMSS(Duration duration) {
+    //   String twoDigits(dynamic n) => n.toString().padLeft(2, '0');
+    //   String threeDigits(dynamic n) => n.toString().padLeft(3, '0');
+    //   final hours = twoDigits(duration.inHours);
+    //   final minutes = twoDigits(duration.inMinutes.remainder(60));
+    //   final seconds = twoDigits(duration.inSeconds.remainder(60));
+    //   final milliseconds = threeDigits(duration.inMilliseconds.remainder(1000));
+    //   return "$hours:$minutes:$seconds.${milliseconds}s";
+    // }
 
     // If no last hit is available, default to a zero Duration.
     final lastHitTime = aggregates.lastHit ?? DateTime.now();
     final timeSinceLastHit = DateTime.now().difference(lastHitTime);
-
-    // Other helper for formatting duration (ex: Total Length Display) remains
-    String formatNormalDuration(double seconds) {
-      if (seconds < 60) return '${formatSecondsDisplay(seconds)} seconds';
-      if (seconds < 3600) {
-        final minutes = seconds ~/ 60;
-        final remainingSeconds = seconds % 60;
-        return '$minutes ${minutes == 1 ? "minute" : "minutes"} ${remainingSeconds.toStringAsFixed(2)} seconds';
-      }
-      final hours = seconds ~/ 3600;
-      final minutes = (seconds % 3600) ~/ 60;
-      return '$hours ${hours == 1 ? "hour" : "hours"} $minutes ${minutes == 1 ? "minute" : "minutes"}';
-    }
 
     final now = DateTime.now();
     final cutoff = now.subtract(const Duration(hours: 24));
@@ -67,17 +56,17 @@ class InfoDisplay extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Time Since Last Hit: ${formatDurationHHMMSS(timeSinceLastHit)}',
+              'Time Since Last Hit: ${formatDurationHHMMSS(timeSinceLastHit.inSeconds.toDouble() + timeSinceLastHit.inMilliseconds / 1000.0, detailed: true)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
-              'Total Length Today: ${aggregates.formattedTotalSecondsToday}',
+              'Duration Today: ${aggregates.formattedTotalSecondsToday}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
-              'Total Length Last 24 Hours: ${formatNormalDuration(totalSecondsLast24)}',
+              'Duration Last 24 Hours: ${formatDurationHHMMSS(totalSecondsLast24, detailed: true)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),

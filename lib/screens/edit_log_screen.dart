@@ -6,6 +6,7 @@ import '../providers/dropdown_options_provider.dart';
 import '../services/log_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/format_utils.dart';
+import '../widgets/rating_slider.dart';
 
 class EditLogScreen extends ConsumerStatefulWidget {
   final Log log;
@@ -22,7 +23,7 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
   late double _durationSeconds;
   late int _moodRating;
   late int _physicalRating;
-  late int _potencyRating;
+  late double _potencyRating;
   late List<String> _selectedReasons;
 
   // Keep timestamp for reference but don't allow editing
@@ -35,7 +36,9 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
     _durationSeconds = widget.log.durationSeconds;
     _moodRating = widget.log.moodRating;
     _physicalRating = widget.log.physicalRating;
-    _potencyRating = widget.log.potencyRating ?? 0;
+    _potencyRating = widget.log.potencyRating != null
+        ? (widget.log.potencyRating! / 5.0).clamp(0.25, 2.0)
+        : 1.0;
     _timestamp = widget.log.timestamp;
     _selectedReasons = widget.log.reason?.toList() ?? [];
   }
@@ -55,7 +58,8 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
         durationSeconds: _durationSeconds,
         moodRating: _moodRating,
         physicalRating: _physicalRating,
-        potencyRating: _potencyRating,
+        potencyRating: (_potencyRating * 5)
+            .round(), // Convert back to 0-10 scale for storage
         // Keep the original timestamp
         timestamp: widget.log.timestamp,
       );
@@ -149,7 +153,8 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
                   labelText: 'Duration (seconds)',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter duration';
@@ -174,19 +179,26 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
               const SizedBox(height: 16),
 
               // Mood rating
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                      'Mood rating: $_moodRating'), // Remove toStringAsFixed(1)
-                  Slider(
-                    value: _moodRating.toDouble(),
-                    min: 0,
-                    max: 10,
-                    divisions: 10,
-                    onChanged: (value) {
+                  Expanded(
+                    child: RatingSlider(
+                      label: 'Mood',
+                      value: _moodRating == -1 ? 5 : _moodRating,
+                      onChanged: (val) {
+                        setState(() {
+                          _moodRating = val;
+                        });
+                      },
+                      activeColor:
+                          _moodRating == -1 ? Colors.grey : Colors.blue,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
                       setState(() {
-                        _moodRating = value.toInt();
+                        _moodRating = -1;
                       });
                     },
                   ),
@@ -195,20 +207,26 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
               const SizedBox(height: 16),
 
               // Physical rating
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                      'Physical rating: $_physicalRating'), // Remove toStringAsFixed(1)
-                  Slider(
-                    value: _physicalRating.toDouble(),
-                    min: 0.0,
-                    max: 10.0,
-                    divisions:
-                        10, // Changed from 20 to make it consistent with integers 0-10
-                    onChanged: (value) {
+                  Expanded(
+                    child: RatingSlider(
+                      label: 'Physical',
+                      value: _physicalRating == -1 ? 5 : _physicalRating,
+                      onChanged: (val) {
+                        setState(() {
+                          _physicalRating = val;
+                        });
+                      },
+                      activeColor:
+                          _physicalRating == -1 ? Colors.grey : Colors.blue,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
                       setState(() {
-                        _physicalRating = value.toInt();
+                        _physicalRating = -1;
                       });
                     },
                   ),
@@ -220,15 +238,18 @@ class _EditLogScreenState extends ConsumerState<EditLogScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Potency rating: $_potencyRating'),
+                  Text(
+                      'Potency strength: ${_potencyRating.toStringAsFixed(2)}'),
                   Slider(
-                    value: _potencyRating.toDouble(),
-                    min: 0,
-                    max: 5,
-                    divisions: 5,
+                    value: _potencyRating,
+                    min: 0.25,
+                    max: 2.0,
+                    divisions:
+                        7, // Creates steps: 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0
+                    label: _potencyRating.toStringAsFixed(2),
                     onChanged: (value) {
                       setState(() {
-                        _potencyRating = value.round();
+                        _potencyRating = value;
                       });
                     },
                   ),

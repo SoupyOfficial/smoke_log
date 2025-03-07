@@ -7,6 +7,7 @@ import '../providers/log_providers.dart';
 import '../providers/dropdown_options_provider.dart';
 import '../models/reason_option.dart';
 import 'rating_slider.dart'; // add this import
+import '../utils/format_utils.dart';
 
 class AddLogForm extends ConsumerStatefulWidget {
   const AddLogForm({super.key});
@@ -59,7 +60,7 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
       if (_durationSeconds > 0) {
         final log = Log(
           timestamp: DateTime.now(),
-          durationSeconds: _durationSeconds, // Round for storage
+          durationSeconds: _durationSeconds,
           reason: _selectedReasons,
           moodRating: _moodRating,
           physicalRating: _physicalRating,
@@ -145,7 +146,7 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
             const SizedBox(height: 16),
             if (_startTime != null)
               Text(
-                'Duration: ${_durationSeconds}s',
+                'Duration: ${formatSecondsDisplay(_durationSeconds)}s',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             const SizedBox(height: 16),
