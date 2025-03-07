@@ -21,8 +21,8 @@ class LineChartWidget extends StatefulWidget {
 }
 
 class _LineChartWidgetState extends State<LineChartWidget> {
-  ChartRange _selectedRange = ChartRange.daily;
-  ChartType _selectedChartType = ChartType.lengthPerHit;
+  ChartRange _selectedRange = ChartRange.weekly;
+  ChartType _selectedChartType = ChartType.thcConcentration;
 
   // Helper method for clean ChartType display names.
   String _chartTypeDisplayName(ChartType type) {
