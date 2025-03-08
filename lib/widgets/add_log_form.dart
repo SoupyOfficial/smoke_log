@@ -140,15 +140,11 @@ class _AddLogFormState extends ConsumerState<AddLogForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Hold to Track',
+              _startTime != null
+                  ? 'Duration: ${formatSecondsDisplay(_durationSeconds)}s'
+                  : 'Hold to Track',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: 16),
-            if (_startTime != null)
-              Text(
-                'Duration: ${formatSecondsDisplay(_durationSeconds)}s',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
             const SizedBox(height: 16),
             GestureDetector(
               onLongPressStart: (_) => _startTimer(),
