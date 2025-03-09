@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "33CC10EC2044A3C60003C045"
                BuildableName = "smoke_log.app"
-               BlueprintName = "Runner"
-               ReferencedContainer = "container:Runner.xcodeproj">
+               BlueprintName = "AshTrail"
+               ReferencedContainer = "container:AshTrail.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,8 +32,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
             BuildableName = "smoke_log.app"
-            BlueprintName = "Runner"
-            ReferencedContainer = "container:Runner.xcodeproj">
+            BlueprintName = "AshTrail"
+            ReferencedContainer = "container:AshTrail.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "331C80D4294CF70F00263BE5"
-               BuildableName = "RunnerTests.xctest"
-               BlueprintName = "RunnerTests"
-               ReferencedContainer = "container:Runner.xcodeproj">
+               BuildableName = "AshTrailTests.xctest"
+               BlueprintName = "AshTrailTests"
+               ReferencedContainer = "container:AshTrail.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -66,8 +66,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
             BuildableName = "smoke_log.app"
-            BlueprintName = "Runner"
-            ReferencedContainer = "container:Runner.xcodeproj">
+            BlueprintName = "AshTrail"
+            ReferencedContainer = "container:AshTrail.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,8 +83,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
             BuildableName = "smoke_log.app"
-            BlueprintName = "Runner"
-            ReferencedContainer = "container:Runner.xcodeproj">
+            BlueprintName = "AshTrail"
+            ReferencedContainer = "container:AshTrail.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

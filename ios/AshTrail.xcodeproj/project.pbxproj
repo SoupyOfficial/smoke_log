@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		246F034FD63F8E4A552EEDC1 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9353537328793075EFFA59E1 /* Pods_RunnerTests.framework */; };
-		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
+		246F034FD63F8E4A552EEDC1 /* Pods_AshTrailTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9353537328793075EFFA59E1 /* Pods_AshTrailTests.framework */; };
+		331C808B294A63AB00263BE5 /* AshTrailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* AshTrailTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		586624DA8B7DDE06B1439BED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F18079A600A0B3A7C6A2D193 /* GoogleService-Info.plist */; };
-		66ED5774368770799F1A1589 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17A83BF343DE08FF9666EC /* Pods_Runner.framework */; };
+		66ED5774368770799F1A1589 /* Pods_AshTrail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF17A83BF343DE08FF9666EC /* Pods_AshTrail.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -25,7 +25,7 @@
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
-			remoteInfo = Runner;
+			remoteInfo = AshTrail;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -43,19 +43,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		138161A1264C0C8BA65594C6 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		138161A1264C0C8BA65594C6 /* Pods-AshTrailTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrailTests.release.xcconfig"; path = "Target Support Files/Pods-AshTrailTests/Pods-AshTrailTests.release.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
-		1B6F0A6E6A3483443656AF57 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
+		1B6F0A6E6A3483443656AF57 /* Pods-AshTrail.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrail.debug.xcconfig"; path = "Target Support Files/Pods-AshTrail/Pods-AshTrail.debug.xcconfig"; sourceTree = "<group>"; };
+		331C807B294A618700263BE5 /* AshTrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AshTrailTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* AshTrailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AshTrailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		34E78F486FD6F9D8E2002D3F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		34E78F486FD6F9D8E2002D3F /* Pods-AshTrail.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrail.profile.xcconfig"; path = "Target Support Files/Pods-AshTrail/Pods-AshTrail.profile.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		60FBB861ADA7CDDB9C514724 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
+		60FBB861ADA7CDDB9C514724 /* Pods-AshTrail.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrail.release.xcconfig"; path = "Target Support Files/Pods-AshTrail/Pods-AshTrail.release.xcconfig"; sourceTree = "<group>"; };
+		74858FAD1ED2DC5600515810 /* AshTrail-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AshTrail-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
-		9353537328793075EFFA59E1 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9353537328793075EFFA59E1 /* Pods_AshTrailTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AshTrailTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* AshTrail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AshTrail.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,10 +63,10 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D377E50D28BD6200D8E65896 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		DF17A83BF343DE08FF9666EC /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED621F7C20DD72E5266D3EE6 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
-		F18079A600A0B3A7C6A2D193 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D377E50D28BD6200D8E65896 /* Pods-AshTrailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrailTests.debug.xcconfig"; path = "Target Support Files/Pods-AshTrailTests/Pods-AshTrailTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DF17A83BF343DE08FF9666EC /* Pods_AshTrail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AshTrail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED621F7C20DD72E5266D3EE6 /* Pods-AshTrailTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrailTests.profile.xcconfig"; path = "Target Support Files/Pods-AshTrailTests/Pods-AshTrailTests.profile.xcconfig"; sourceTree = "<group>"; };
+		F18079A600A0B3A7C6A2D193 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "AshTrail/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				246F034FD63F8E4A552EEDC1 /* Pods_RunnerTests.framework in Frameworks */,
+				246F034FD63F8E4A552EEDC1 /* Pods_AshTrailTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,26 +82,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66ED5774368770799F1A1589 /* Pods_Runner.framework in Frameworks */,
+				66ED5774368770799F1A1589 /* Pods_AshTrail.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		331C8082294A63A400263BE5 /* RunnerTests */ = {
+		331C8082294A63A400263BE5 /* AshTrailTests */ = {
 			isa = PBXGroup;
 			children = (
-				331C807B294A618700263BE5 /* RunnerTests.swift */,
+				331C807B294A618700263BE5 /* AshTrailTests.swift */,
 			);
-			path = RunnerTests;
+			path = AshTrailTests;
 			sourceTree = "<group>";
 		};
 		3E7088D2C028876DBB55B7A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DF17A83BF343DE08FF9666EC /* Pods_Runner.framework */,
-				9353537328793075EFFA59E1 /* Pods_RunnerTests.framework */,
+				DF17A83BF343DE08FF9666EC /* Pods_AshTrail.framework */,
+				9353537328793075EFFA59E1 /* Pods_AshTrailTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,9 +121,9 @@
 			isa = PBXGroup;
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
-				97C146F01CF9000F007C117D /* Runner */,
+				97C146F01CF9000F007C117D /* AshTrail */,
 				97C146EF1CF9000F007C117D /* Products */,
-				331C8082294A63A400263BE5 /* RunnerTests */,
+				331C8082294A63A400263BE5 /* AshTrailTests */,
 				D9E603CF1B417591CE59880E /* Pods */,
 				3E7088D2C028876DBB55B7A5 /* Frameworks */,
 				F18079A600A0B3A7C6A2D193 /* GoogleService-Info.plist */,
@@ -139,7 +139,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		97C146F01CF9000F007C117D /* Runner */ = {
+		97C146F01CF9000F007C117D /* AshTrail */ = {
 			isa = PBXGroup;
 			children = (
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -149,20 +149,20 @@
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
-				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				74858FAD1ED2DC5600515810 /* AshTrail-Bridging-Header.h */,
 			);
-			path = Runner;
+			path = AshTrail;
 			sourceTree = "<group>";
 		};
 		D9E603CF1B417591CE59880E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1B6F0A6E6A3483443656AF57 /* Pods-Runner.debug.xcconfig */,
-				60FBB861ADA7CDDB9C514724 /* Pods-Runner.release.xcconfig */,
-				34E78F486FD6F9D8E2002D3F /* Pods-Runner.profile.xcconfig */,
-				D377E50D28BD6200D8E65896 /* Pods-RunnerTests.debug.xcconfig */,
-				138161A1264C0C8BA65594C6 /* Pods-RunnerTests.release.xcconfig */,
-				ED621F7C20DD72E5266D3EE6 /* Pods-RunnerTests.profile.xcconfig */,
+				1B6F0A6E6A3483443656AF57 /* Pods-AshTrail.debug.xcconfig */,
+				60FBB861ADA7CDDB9C514724 /* Pods-AshTrail.release.xcconfig */,
+				34E78F486FD6F9D8E2002D3F /* Pods-AshTrail.profile.xcconfig */,
+				D377E50D28BD6200D8E65896 /* Pods-AshTrailTests.debug.xcconfig */,
+				138161A1264C0C8BA65594C6 /* Pods-AshTrailTests.release.xcconfig */,
+				ED621F7C20DD72E5266D3EE6 /* Pods-AshTrailTests.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				331C8086294A63A400263BE5 /* PBXTargetDependency */,
 			);
 			name = AshTrailTests;
-			productName = RunnerTests;
+			productName = AshTrailTests;
 			productReference = 331C8081294A63A400263BE5 /* AshTrailTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -207,7 +207,7 @@
 			dependencies = (
 			);
 			name = AshTrail;
-			productName = Runner;
+			productName = AshTrail;
 			productReference = 97C146EE1CF9000F007C117D /* AshTrail.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -304,7 +304,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-AshTrail-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -341,7 +341,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RunnerTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-AshTrailTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -354,15 +354,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AshTrail/Pods-AshTrail-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AshTrail/Pods-AshTrail-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AshTrail/Pods-AshTrail-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -372,7 +372,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */,
+				331C808B294A63AB00263BE5 /* AshTrailTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,7 +478,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = DGQ5P34GS9;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = AshTrail/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AshTrail;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -488,7 +488,7 @@
 				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AshTrail/AshTrail-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -496,14 +496,14 @@
 		};
 		331C8088294A63A400263BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D377E50D28BD6200D8E65896 /* Pods-RunnerTests.debug.xcconfig */;
+			baseConfigurationReference = D377E50D28BD6200D8E65896 /* Pods-AshTrailTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.AshTrailTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -514,14 +514,14 @@
 		};
 		331C8089294A63A400263BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 138161A1264C0C8BA65594C6 /* Pods-RunnerTests.release.xcconfig */;
+			baseConfigurationReference = 138161A1264C0C8BA65594C6 /* Pods-AshTrailTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.AshTrailTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AshTrail.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AshTrail";
@@ -530,14 +530,14 @@
 		};
 		331C808A294A63A400263BE5 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED621F7C20DD72E5266D3EE6 /* Pods-RunnerTests.profile.xcconfig */;
+			baseConfigurationReference = ED621F7C20DD72E5266D3EE6 /* Pods-AshTrailTests.profile.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog.AshTrailTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AshTrail.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AshTrail";
@@ -667,7 +667,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = DGQ5P34GS9;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = AshTrail/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AshTrail;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -677,7 +677,7 @@
 				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AshTrail/AshTrail-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -694,7 +694,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = DGQ5P34GS9;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_FILE = AshTrail/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AshTrail;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -704,7 +704,7 @@
 				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.soup.smokeLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AshTrail/AshTrail-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
