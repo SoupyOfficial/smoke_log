@@ -48,6 +48,28 @@
                ReferencedContainer = "container:AshTrail.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EB96FF0B2D7D2F6C00C787F3"
+               BuildableName = "smoke_logUITests.xctest"
+               BlueprintName = "smoke_logUITests"
+               ReferencedContainer = "container:AshTrail.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EB96FF1B2D7D2FEF00C787F3"
+               BuildableName = "AshTrailUITests.xctest"
+               BlueprintName = "AshTrailUITests"
+               ReferencedContainer = "container:AshTrail.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -71,15 +93,6 @@
             ReferencedContainer = "container:AshTrail.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "97C146ED1CF9000F007C117D"
-            BuildableName = "AshTrail.app"
-            BlueprintName = "AshTrail"
-            ReferencedContainer = "container:AshTrail.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Profile"
@@ -97,15 +110,6 @@
             ReferencedContainer = "container:AshTrail.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "97C146ED1CF9000F007C117D"
-            BuildableName = "AshTrail.app"
-            BlueprintName = "AshTrail"
-            ReferencedContainer = "container:AshTrail.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

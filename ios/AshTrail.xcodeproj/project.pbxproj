@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		331C8085294A63A400263BE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
+			remoteInfo = AshTrail;
+		};
+		EB96FF222D7D2FEF00C787F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
@@ -65,9 +72,15 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D377E50D28BD6200D8E65896 /* Pods-AshTrailTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrailTests.debug.xcconfig"; path = "Target Support Files/Pods-AshTrailTests/Pods-AshTrailTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DF17A83BF343DE08FF9666EC /* Pods_AshTrail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AshTrail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB96FF1C2D7D2FEF00C787F3 /* AshTrailUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AshTrailUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED621F7C20DD72E5266D3EE6 /* Pods-AshTrailTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AshTrailTests.profile.xcconfig"; path = "Target Support Files/Pods-AshTrailTests/Pods-AshTrailTests.profile.xcconfig"; sourceTree = "<group>"; };
 		F18079A600A0B3A7C6A2D193 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "AshTrail/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		EB96FF0D2D7D2F6D00C787F3 /* smoke_logUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = smoke_logUITests; sourceTree = "<group>"; };
+		EB96FF1D2D7D2FEF00C787F3 /* AshTrailUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AshTrailUITests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		68EFDA79F3ED80FE70FAB4D0 /* Frameworks */ = {
@@ -83,6 +96,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				66ED5774368770799F1A1589 /* Pods_AshTrail.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB96FF192D7D2FEF00C787F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +142,8 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* AshTrail */,
+				EB96FF0D2D7D2F6D00C787F3 /* smoke_logUITests */,
+				EB96FF1D2D7D2FEF00C787F3 /* AshTrailUITests */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* AshTrailTests */,
 				D9E603CF1B417591CE59880E /* Pods */,
@@ -135,6 +157,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* AshTrail.app */,
 				331C8081294A63A400263BE5 /* AshTrailTests.xctest */,
+				EB96FF1C2D7D2FEF00C787F3 /* AshTrailUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,6 +234,29 @@
 			productReference = 97C146EE1CF9000F007C117D /* AshTrail.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EB96FF1B2D7D2FEF00C787F3 /* AshTrailUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB96FF242D7D2FEF00C787F3 /* Build configuration list for PBXNativeTarget "AshTrailUITests" */;
+			buildPhases = (
+				EB96FF182D7D2FEF00C787F3 /* Sources */,
+				EB96FF192D7D2FEF00C787F3 /* Frameworks */,
+				EB96FF1A2D7D2FEF00C787F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB96FF232D7D2FEF00C787F3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EB96FF1D2D7D2FEF00C787F3 /* AshTrailUITests */,
+			);
+			name = AshTrailUITests;
+			packageProductDependencies = (
+			);
+			productName = AshTrailUITests;
+			productReference = EB96FF1C2D7D2FEF00C787F3 /* AshTrailUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -218,6 +264,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -228,6 +275,10 @@
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					EB96FF1B2D7D2FEF00C787F3 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 97C146ED1CF9000F007C117D;
 					};
 				};
 			};
@@ -246,6 +297,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* AshTrail */,
 				331C8080294A63A400263BE5 /* AshTrailTests */,
+				EB96FF1B2D7D2FEF00C787F3 /* AshTrailUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -267,6 +319,13 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				586624DA8B7DDE06B1439BED /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB96FF1A2D7D2FEF00C787F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +444,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB96FF182D7D2FEF00C787F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -392,6 +458,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* AshTrail */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		EB96FF232D7D2FEF00C787F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 97C146ED1CF9000F007C117D /* AshTrail */;
+			targetProxy = EB96FF222D7D2FEF00C787F3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -710,6 +781,90 @@
 			};
 			name = Release;
 		};
+		EB96FF252D7D2FEF00C787F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DGQ5P34GS9;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = MobileApp.AshTrailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AshTrail;
+			};
+			name = Debug;
+		};
+		EB96FF262D7D2FEF00C787F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DGQ5P34GS9;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = MobileApp.AshTrailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AshTrail;
+			};
+			name = Release;
+		};
+		EB96FF272D7D2FEF00C787F3 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DGQ5P34GS9;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = MobileApp.AshTrailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AshTrail;
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -739,6 +894,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB96FF242D7D2FEF00C787F3 /* Build configuration list for PBXNativeTarget "AshTrailUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB96FF252D7D2FEF00C787F3 /* Debug */,
+				EB96FF262D7D2FEF00C787F3 /* Release */,
+				EB96FF272D7D2FEF00C787F3 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
